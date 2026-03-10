@@ -61,7 +61,7 @@ const DemoBackend = (function () {
 
     // ---- Seed Sample Data ----
     function seedData() {
-        if (localStorage.getItem(KEYS.seeded) === 'true') return;
+        if (localStorage.getItem(KEYS.seeded) === 'v2') return;
 
         const users = [
             { id: 1, name: 'Admin User', email: 'admin@andrews.edu', password: 'Admin123', role: 'admin', department: 'Administration', status: 'active', created_at: '2024-01-15 10:00:00' },
@@ -123,7 +123,7 @@ const DemoBackend = (function () {
             currency: '₹'
         });
 
-        localStorage.setItem(KEYS.seeded, 'true');
+        localStorage.setItem(KEYS.seeded, 'v2');
     }
 
     // ---- Auth Functions ----

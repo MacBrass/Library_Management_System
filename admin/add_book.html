@@ -75,9 +75,13 @@
                         </div>
                         <div class="form-group">
                             <label>Book Cover Image</label>
-                            <div class="upload-area">
+                            <div class="upload-area" id="coverUploadArea">
+                                <input type="file" id="coverImageFile" accept="image/*">
                                 <i class="fas fa-cloud-upload-alt"></i>
-                                <p>Cover upload not available in demo mode</p>
+                                <p>Drag & drop image here or click to browse</p>
+                                <div class="upload-preview" id="coverPreview" style="display:none; margin-top:10px;">
+                                    <img id="previewImg" style="max-height: 100px; border-radius: 4px; border: 1px solid var(--border-color);" alt="preview">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -95,16 +99,24 @@
 
         document.getElementById('addBookForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            const btn = document.getElementById('submitBookBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+            btn.disabled = true;
+
             const title = document.getElementById('title').value.trim();
             const author = document.getElementById('author').value.trim();
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
 
             if (!title || !author) {
                 DemoUI.showAlert('alertArea', 'Book title and author are required.', 'danger');
+                btn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Book';
+                btn.disabled = false;
                 return;
             }
             if (quantity < 1) {
                 DemoUI.showAlert('alertArea', 'Quantity must be at least 1.', 'danger');
+                btn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Book';
+                btn.disabled = false;
                 return;
             }
 
@@ -114,16 +126,45 @@
                 category: document.getElementById('category').value,
                 publisher: document.getElementById('publisher').value.trim(),
                 year: parseInt(document.getElementById('year').value) || 0,
-                quantity
+                quantity,
+                cover_image: uploadedCoverBase64
             });
 
             if (result.success) {
                 DemoUI.showAlert('alertArea', 'Book "' + DemoBackend.escapeHtml(result.title) + '" added successfully!', 'success');
                 e.target.reset();
+                uploadedCoverBase64 = '';
+                document.getElementById('coverPreview').style.display = 'none';
             } else {
                 DemoUI.showAlert('alertArea', 'Failed to add book.', 'danger');
             }
+            btn.innerHTML = '<i class="fas fa-plus-circle"></i> Add Book';
+            btn.disabled = false;
         });
+
+        // Setup drag and drop
+        let uploadedCoverBase64 = '';
+        const fileInput = document.getElementById('coverImageFile');
+        const uploadArea = document.getElementById('coverUploadArea');
+        const preview = document.getElementById('coverPreview');
+        const previewImg = document.getElementById('previewImg');
+
+        fileInput.addEventListener('change', function(e) { handleFile(e.target.files[0]); });
+        
+        uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.style.borderColor = 'var(--accent)'; });
+        uploadArea.addEventListener('dragleave', e => { e.preventDefault(); uploadArea.style.borderColor = 'var(--border-color)'; });
+        uploadArea.addEventListener('drop', e => { e.preventDefault(); uploadArea.style.borderColor = 'var(--border-color)'; handleFile(e.dataTransfer.files[0]); });
+
+        function handleFile(file) {
+            if (!file || !file.type.startsWith('image/')) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                uploadedCoverBase64 = e.target.result;
+                previewImg.src = uploadedCoverBase64;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
     }
 </script>
 <script src="../assets/js/main.js"></script>
