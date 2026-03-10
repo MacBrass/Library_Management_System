@@ -690,129 +690,115 @@ const DemoBackend = (function () {
     }
 
     function generateReceiptHTML(receipt) {
-        const s = getFineSettings();
-        const c = s.currency;
-        const isReturn = receipt.type === 'return';
-        const hasFine = receipt.fine > 0;
+        var s = getFineSettings();
+        var c = s.currency;
+        var isReturn = receipt.type === 'return';
+        var hasFine = receipt.fine > 0;
 
-        return `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt ${receipt.receipt_number}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #f0f2f5; padding: 20px; color: #1e293b; }
-        .receipt { max-width: 600px; margin: 0 auto; background: #fff; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); overflow: hidden; }
-        .receipt-header { background: linear-gradient(135deg, #1e3a5f, #2d5a8e); color: #fff; padding: 28px 32px; text-align: center; }
-        .receipt-header .logo { font-size: 2rem; margin-bottom: 8px; }
-        .receipt-header h1 { font-size: 1.2rem; font-weight: 600; letter-spacing: 0.5px; }
-        .receipt-header p { font-size: 0.8rem; opacity: 0.8; margin-top: 4px; }
-        .receipt-type { text-align: center; padding: 16px; }
-        .receipt-type span { display: inline-block; padding: 6px 20px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-        .type-issue { background: #dbeafe; color: #1d4ed8; }
-        .type-return { background: #dcfce7; color: #16a34a; }
-        .type-fine { background: #fee2e2; color: #dc2626; }
-        .receipt-body { padding: 0 32px 24px; }
-        .receipt-number { text-align: center; font-size: 0.8rem; color: #64748b; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 2px dashed #e2e8f0; }
-        .receipt-number strong { color: #1e293b; font-size: 0.9rem; }
-        .info-section { margin-bottom: 20px; }
-        .info-section h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 10px; font-weight: 600; }
-        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .info-item { padding: 8px 12px; background: #f8fafc; border-radius: 8px; }
-        .info-item .label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
-        .info-item .value { font-size: 0.9rem; font-weight: 500; margin-top: 2px; }
-        .info-item.full { grid-column: 1 / -1; }
-        .fine-box { background: ${hasFine ? 'linear-gradient(135deg, #fef2f2, #fee2e2)' : 'linear-gradient(135deg, #f0fdf4, #dcfce7)'}; border: 1px solid ${hasFine ? '#fca5a5' : '#86efac'}; border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0; }
-        .fine-box .amount { font-size: 2rem; font-weight: 700; color: ${hasFine ? '#dc2626' : '#16a34a'}; }
-        .fine-box .fine-label { font-size: 0.8rem; color: ${hasFine ? '#991b1b' : '#166534'}; margin-top: 4px; }
-        .fine-details { font-size: 0.75rem; color: #64748b; margin-top: 8px; }
-        .receipt-footer { padding: 20px 32px; background: #f8fafc; border-top: 1px solid #e2e8f0; text-align: center; }
-        .receipt-footer p { font-size: 0.75rem; color: #94a3b8; line-height: 1.6; }
-        .print-btn { display: inline-block; padding: 10px 28px; background: linear-gradient(135deg, #1e3a5f, #2d5a8e); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; margin: 16px 0; }
-        .print-btn:hover { opacity: 0.9; }
-        .download-btn { display: inline-block; padding: 10px 28px; background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 500; margin: 16px 4px; }
-        @media print {
-            body { background: #fff; padding: 0; }
-            .receipt { box-shadow: none; }
-            .print-btn, .download-btn, .no-print { display: none !important; }
+        // Pre-compute all strings
+        var generatedDateStr = new Date(receipt.generated_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        var issueDateStr = receipt.issue_date ? new Date(receipt.issue_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+        var dueDateStr = receipt.due_date ? new Date(receipt.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+        var dueDateLong = receipt.due_date ? new Date(receipt.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) : 'N/A';
+        var returnDateStr = receipt.return_date ? new Date(receipt.return_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+        var roleStr = receipt.user_role.charAt(0).toUpperCase() + receipt.user_role.slice(1);
+        var typeLabel = receipt.type === 'issue' ? 'Book Issue Receipt' : receipt.type === 'return' ? 'Book Return Receipt' : 'Fine Receipt';
+        var fineAmountStr = receipt.fine > 0 ? receipt.fine.toFixed(2) : '0.00';
+
+        // Return date rows (only for return receipt)
+        var returnDateRows = '';
+        if (isReturn) {
+            returnDateRows = '<div class="info-item"><div class="label">Return Date</div><div class="value">' + returnDateStr + '</div></div>' +
+                '<div class="info-item"><div class="label">Late By</div><div class="value">' + (receipt.late_days > 0 ? receipt.late_days + ' day(s)' : 'On Time') + '</div></div>';
         }
-    </style>
-</head>
-<body>
-    <div class="receipt">
-        <div class="receipt-header">
-            <div class="logo">📚</div>
-            <h1>St. Andrew's College Library</h1>
-            <p>Bandra, Mumbai</p>
-        </div>
 
-        <div class="receipt-type">
-            <span class="type-${receipt.type}">
-                ${receipt.type === 'issue' ? '📖 Book Issue Receipt' : receipt.type === 'return' ? '✅ Book Return Receipt' : '💰 Fine Receipt'}
-            </span>
-        </div>
+        // Fine/borrow period section
+        var fineSection = '';
+        if (isReturn) {
+            var fineBoxBg = hasFine ? 'linear-gradient(135deg,#fef2f2,#fee2e2)' : 'linear-gradient(135deg,#f0fdf4,#dcfce7)';
+            var fineBoxBorder = hasFine ? '#fca5a5' : '#86efac';
+            var fineAmtColor = hasFine ? '#dc2626' : '#16a34a';
+            var fineLabelColor = hasFine ? '#991b1b' : '#166534';
+            var fineLabelText = hasFine ? 'FINE AMOUNT' : 'NO FINE';
+            var fineDetailsHtml = hasFine ? '<div class="fine-details">Mode: ' + (receipt.fine_mode === 'fixed' ? 'Fixed' : 'Per day') + (receipt.late_days > 0 ? ' | Late: ' + receipt.late_days + ' day(s)' : '') + '</div>' : '';
+            fineSection = '<div class="fine-box" style="background:' + fineBoxBg + ';border:1px solid ' + fineBoxBorder + '">' +
+                '<div class="fine-label" style="color:' + fineLabelColor + '">' + fineLabelText + '</div>' +
+                '<div class="amount" style="color:' + fineAmtColor + '">' + c + fineAmountStr + '</div>' +
+                fineDetailsHtml + '</div>';
+        } else {
+            fineSection = '<div class="fine-box" style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #93c5fd">' +
+                '<div class="fine-label" style="color:#1e40af">BORROW PERIOD</div>' +
+                '<div class="amount" style="color:#1d4ed8;font-size:1.2rem">' + dueDateLong + '</div>' +
+                '<div class="fine-details">Please return by due date to avoid fines</div></div>';
+        }
 
-        <div class="receipt-body">
-            <div class="receipt-number">
-                Receipt No: <strong>${receipt.receipt_number}</strong><br>
-                Date: ${new Date(receipt.generated_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
-            </div>
-
-            <div class="info-section">
-                <h3>👤 Borrower Details</h3>
-                <div class="info-grid">
-                    <div class="info-item"><div class="label">Name</div><div class="value">${receipt.user_name}</div></div>
-                    <div class="info-item"><div class="label">Role</div><div class="value">${receipt.user_role.charAt(0).toUpperCase() + receipt.user_role.slice(1)}</div></div>
-                    <div class="info-item"><div class="label">Email</div><div class="value">${receipt.user_email}</div></div>
-                    <div class="info-item"><div class="label">Department</div><div class="value">${receipt.user_department || 'N/A'}</div></div>
-                </div>
-            </div>
-
-            <div class="info-section">
-                <h3>📚 Book Details</h3>
-                <div class="info-grid">
-                    <div class="info-item full"><div class="label">Title</div><div class="value">${receipt.book_title}</div></div>
-                    <div class="info-item"><div class="label">Author</div><div class="value">${receipt.book_author}</div></div>
-                    <div class="info-item"><div class="label">ISBN</div><div class="value">${receipt.book_isbn || 'N/A'}</div></div>
-                </div>
-            </div>
-
-            <div class="info-section">
-                <h3>📅 Dates</h3>
-                <div class="info-grid">
-                    <div class="info-item"><div class="label">Issue Date</div><div class="value">${receipt.issue_date ? new Date(receipt.issue_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</div></div>
-                    <div class="info-item"><div class="label">Due Date</div><div class="value">${receipt.due_date ? new Date(receipt.due_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</div></div>
-                    ${isReturn ? '<div class="info-item"><div class="label">Return Date</div><div class="value">' + new Date(receipt.return_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + '</div></div>' : ''}
-                    ${isReturn ? '<div class="info-item"><div class="label">Late By</div><div class="value">' + (receipt.late_days > 0 ? receipt.late_days + ' day(s)' : 'On Time') + '</div></div>' : ''}
-                </div>
-            </div>
-
-            ${isReturn ? '<div class="fine-box"><div class="fine-label">' + (hasFine ? 'FINE AMOUNT' : 'NO FINE') + '</div><div class="amount">' + c + (receipt.fine > 0 ? receipt.fine.toFixed(2) : '0.00') + '</div>' + (hasFine ? '<div class="fine-details">Fine mode: ' + (receipt.fine_mode === 'fixed' ? 'Fixed' : 'Per day') + (receipt.late_days > 0 ? ' | Late: ' + receipt.late_days + ' day(s)' : '') + '</div>' : '') + '</div>' : '<div class="fine-box" style="background: linear-gradient(135deg, #eff6ff, #dbeafe); border-color: #93c5fd;"><div class="fine-label" style="color: #1e40af;">BORROW PERIOD</div><div class="amount" style="color: #1d4ed8; font-size: 1.2rem;">${receipt.due_date ? new Date(receipt.due_date).toLocaleDateString("en-IN", { day: "2-digit", month: "long", year: "numeric" }) : "N/A"}</div><div class="fine-details">Please return by due date to avoid fines</div></div>'}
-        </div>
-
-        <div class="receipt-footer">
-            <p><strong>St. Andrew's College Library</strong><br>
-            Bandra (W), Mumbai 400 050<br>
-            This is a computer-generated receipt. No signature required.</p>
-        </div>
-    </div>
-
-    <div style="text-align: center;" class="no-print">
-        <button class="print-btn" onclick="window.print()">🖨️ Print Receipt</button>
-        <button class="download-btn" onclick="downloadPDF()">📥 Save as PDF</button>
-    </div>
-
-    <script>
-    function downloadPDF() {
-        alert('To save as PDF: Click Print, then choose "Save as PDF" as destination.');
-        window.print();
-    }
-    <\/script>
-</body>
-</html>`;
+        return '<!DOCTYPE html><html lang="en"><head>' +
+            '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">' +
+            '<title>Receipt ' + receipt.receipt_number + '</title>' +
+            '<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">' +
+            '<style>' +
+            '*{margin:0;padding:0;box-sizing:border-box}' +
+            'body{font-family:"Inter",sans-serif;background:#f0f2f5;padding:20px;color:#1e293b}' +
+            '.receipt{max-width:560px;margin:0 auto;background:#fff;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.1);overflow:hidden}' +
+            '.receipt-header{background:linear-gradient(135deg,#1e3a5f,#2d5a8e);color:#fff;padding:24px 28px;text-align:center}' +
+            '.receipt-header .logo{font-size:1.8rem;margin-bottom:6px}' +
+            '.receipt-header h1{font-size:1.1rem;font-weight:600;letter-spacing:.5px}' +
+            '.receipt-header p{font-size:.75rem;opacity:.8;margin-top:3px}' +
+            '.receipt-type{text-align:center;padding:14px}' +
+            '.receipt-type span{display:inline-block;padding:5px 18px;border-radius:20px;font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:1px}' +
+            '.type-issue{background:#dbeafe;color:#1d4ed8}' +
+            '.type-return{background:#dcfce7;color:#16a34a}' +
+            '.type-fine{background:#fee2e2;color:#dc2626}' +
+            '.receipt-body{padding:0 28px 20px}' +
+            '.receipt-number{text-align:center;font-size:.78rem;color:#64748b;margin-bottom:14px;padding-bottom:14px;border-bottom:2px dashed #e2e8f0}' +
+            '.receipt-number strong{color:#1e293b;font-size:.85rem}' +
+            '.info-section{margin-bottom:16px}' +
+            '.info-section h3{font-size:.72rem;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;margin-bottom:8px;font-weight:600}' +
+            '.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}' +
+            '.info-item{padding:7px 10px;background:#f8fafc;border-radius:8px}' +
+            '.info-item .label{font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}' +
+            '.info-item .value{font-size:.85rem;font-weight:500;margin-top:1px}' +
+            '.info-item.full{grid-column:1/-1}' +
+            '.fine-box{border-radius:12px;padding:16px;text-align:center;margin:16px 0}' +
+            '.fine-box .amount{font-size:1.8rem;font-weight:700}' +
+            '.fine-box .fine-label{font-size:.75rem;margin-top:2px;font-weight:600;letter-spacing:.5px}' +
+            '.fine-details{font-size:.72rem;color:#64748b;margin-top:6px}' +
+            '.receipt-footer{padding:16px 28px;background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center}' +
+            '.receipt-footer p{font-size:.7rem;color:#94a3b8;line-height:1.5}' +
+            '.action-bar{text-align:center;padding:16px}' +
+            '.action-bar button{padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-size:.85rem;font-weight:500;margin:4px;color:#fff}' +
+            '.btn-print{background:linear-gradient(135deg,#1e3a5f,#2d5a8e)}' +
+            '.btn-pdf{background:linear-gradient(135deg,#16a34a,#15803d)}' +
+            '@media print{body{background:#fff;padding:0}.receipt{box-shadow:none}.action-bar{display:none!important}}' +
+            '</style></head><body>' +
+            '<div class="receipt">' +
+            '<div class="receipt-header"><div class="logo">\ud83d\udcda</div><h1>St. Andrew\'s College Library</h1><p>Bandra, Mumbai</p></div>' +
+            '<div class="receipt-type"><span class="type-' + receipt.type + '">' + typeLabel + '</span></div>' +
+            '<div class="receipt-body">' +
+            '<div class="receipt-number">Receipt No: <strong>' + receipt.receipt_number + '</strong><br>Date: ' + generatedDateStr + '</div>' +
+            '<div class="info-section"><h3>Borrower Details</h3><div class="info-grid">' +
+            '<div class="info-item"><div class="label">Name</div><div class="value">' + receipt.user_name + '</div></div>' +
+            '<div class="info-item"><div class="label">Role</div><div class="value">' + roleStr + '</div></div>' +
+            '<div class="info-item"><div class="label">Email</div><div class="value">' + receipt.user_email + '</div></div>' +
+            '<div class="info-item"><div class="label">Dept</div><div class="value">' + (receipt.user_department || 'N/A') + '</div></div>' +
+            '</div></div>' +
+            '<div class="info-section"><h3>Book Details</h3><div class="info-grid">' +
+            '<div class="info-item full"><div class="label">Title</div><div class="value">' + receipt.book_title + '</div></div>' +
+            '<div class="info-item"><div class="label">Author</div><div class="value">' + receipt.book_author + '</div></div>' +
+            '<div class="info-item"><div class="label">ISBN</div><div class="value">' + (receipt.book_isbn || 'N/A') + '</div></div>' +
+            '</div></div>' +
+            '<div class="info-section"><h3>Dates</h3><div class="info-grid">' +
+            '<div class="info-item"><div class="label">Issue Date</div><div class="value">' + issueDateStr + '</div></div>' +
+            '<div class="info-item"><div class="label">Due Date</div><div class="value">' + dueDateStr + '</div></div>' +
+            returnDateRows +
+            '</div></div>' +
+            fineSection +
+            '</div>' +
+            '<div class="receipt-footer"><p><strong>St. Andrew\'s College Library</strong><br>Bandra (W), Mumbai 400 050<br>Computer-generated receipt. No signature required.</p></div>' +
+            '</div>' +
+            '<div class="action-bar"><button class="btn-print" onclick="window.print()">Print Receipt</button>' +
+            '<button class="btn-pdf" onclick="alert(\'Use Print > Save as PDF\');window.print()">Save as PDF</button></div>' +
+            '</body></html>';
     }
 
     // ---- Utility ----

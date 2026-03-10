@@ -34,100 +34,87 @@
             <div class="card-body">
                 <form id="fineSettingsForm">
 
-                    <!-- Borrow Period -->
+                    <!-- General Rules -->
                     <div class="settings-section">
-                        <h3 class="settings-title"><i class="fas fa-calendar-alt"></i> Borrow Period</h3>
-                        <div class="form-row">
-                            <div class="form-group">
+                        <h3 class="settings-title"><i class="fas fa-sliders-h"></i> General Rules</h3>
+                        <div class="form-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                            <div class="form-group mb-0">
                                 <label for="borrowPeriod">Borrow Period (days)</label>
-                                <input type="number" class="form-control" id="borrowPeriod" value="${s.borrowPeriod}" min="1" max="365" required>
-                                <span class="form-help">Number of days a user can keep a book before fines apply</span>
+                                <input type="number" class="form-control form-control-sm" id="borrowPeriod" value="${s.borrowPeriod}" min="1" max="365" required>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mb-0">
+                                <label for="noReturnDays">No-Return Threshold</label>
+                                <input type="number" class="form-control form-control-sm" id="noReturnDays" value="${s.noReturnDays}" min="1" max="365" required>
+                            </div>
+                            <div class="form-group mb-0">
                                 <label for="currency">Currency Symbol</label>
-                                <input type="text" class="form-control" id="currency" value="${DemoBackend.escapeHtml(s.currency)}" maxlength="5" required>
+                                <input type="text" class="form-control form-control-sm" id="currency" value="${DemoBackend.escapeHtml(s.currency)}" maxlength="5" required>
                             </div>
                         </div>
                     </div>
 
                     <!-- Fine Mode -->
                     <div class="settings-section">
-                        <h3 class="settings-title"><i class="fas fa-toggle-on"></i> Fine Mode</h3>
+                        <h3 class="settings-title"><i class="fas fa-calculator"></i> Calculation Mode</h3>
                         <div class="fine-mode-cards">
                             <label class="mode-card ${s.fineMode === 'per_day' ? 'selected' : ''}" id="modePerDayCard">
                                 <input type="radio" name="fineMode" value="per_day" ${s.fineMode === 'per_day' ? 'checked' : ''}>
                                 <div class="mode-icon"><i class="fas fa-chart-line"></i></div>
                                 <h4>Per Day</h4>
-                                <p>Fine increases each day the book is late. Different rates for students & professors.</p>
+                                <p>Increases daily</p>
                             </label>
                             <label class="mode-card ${s.fineMode === 'fixed' ? 'selected' : ''}" id="modeFixedCard">
                                 <input type="radio" name="fineMode" value="fixed" ${s.fineMode === 'fixed' ? 'checked' : ''}>
                                 <div class="mode-icon"><i class="fas fa-lock"></i></div>
-                                <h4>Fixed Fine</h4>
-                                <p>A single flat fine is charged regardless of how late the return is.</p>
+                                <h4>Fixed Rate</h4>
+                                <p>Flat penalty</p>
                             </label>
                         </div>
                     </div>
 
-                    <!-- Per-Day Fine Settings -->
-                    <div class="settings-section" id="perDaySection" style="${s.fineMode === 'per_day' ? '' : 'display:none'}">
-                        <h3 class="settings-title"><i class="fas fa-chart-line"></i> Per-Day Fine Rates</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="studentFinePerDay"><i class="fas fa-user-graduate"></i> Student Fine (per late day)</label>
+                    <!-- Role Rates & Penalties -->
+                    <div class="settings-section pb-0">
+                        <h3 class="settings-title"><i class="fas fa-coins"></i> Role Rates & Penalties</h3>
+                        <div class="form-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                            
+                            <!-- Rates (Shows based on mode) -->
+                            <div class="form-group mb-0 rates-per-day" style="${s.fineMode === 'per_day' ? '' : 'display:none'}">
+                                <label for="studentFinePerDay">Student Fast Rate</label>
                                 <div class="input-with-prefix">
-                                    <span class="input-prefix">${DemoBackend.escapeHtml(s.currency)}</span>
-                                    <input type="number" class="form-control" id="studentFinePerDay" value="${s.studentFinePerDay}" min="0" step="0.5" required>
+                                    <span class="input-prefix" id="sym1">${DemoBackend.escapeHtml(s.currency)}</span>
+                                    <input type="number" class="form-control form-control-sm" id="studentFinePerDay" value="${s.studentFinePerDay}" min="0" step="0.5" required>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="professorFinePerDay"><i class="fas fa-chalkboard-teacher"></i> Professor Fine (per late day)</label>
+                            <div class="form-group mb-0 rates-per-day" style="${s.fineMode === 'per_day' ? '' : 'display:none'}">
+                                <label for="professorFinePerDay">Professor Fast Rate</label>
                                 <div class="input-with-prefix">
-                                    <span class="input-prefix">${DemoBackend.escapeHtml(s.currency)}</span>
-                                    <input type="number" class="form-control" id="professorFinePerDay" value="${s.professorFinePerDay}" min="0" step="0.5" required>
+                                    <span class="input-prefix" id="sym2">${DemoBackend.escapeHtml(s.currency)}</span>
+                                    <input type="number" class="form-control form-control-sm" id="professorFinePerDay" value="${s.professorFinePerDay}" min="0" step="0.5" required>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- Fixed Fine Settings -->
-                    <div class="settings-section" id="fixedSection" style="${s.fineMode === 'fixed' ? '' : 'display:none'}">
-                        <h3 class="settings-title"><i class="fas fa-lock"></i> Fixed Fine Amounts</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="studentFixedFine"><i class="fas fa-user-graduate"></i> Student Fixed Fine</label>
+                            <div class="form-group mb-0 rates-fixed" style="${s.fineMode === 'fixed' ? '' : 'display:none'}">
+                                <label for="studentFixedFine">Student Fixed Rate</label>
                                 <div class="input-with-prefix">
-                                    <span class="input-prefix">${DemoBackend.escapeHtml(s.currency)}</span>
-                                    <input type="number" class="form-control" id="studentFixedFine" value="${s.studentFixedFine}" min="0" step="1" required>
+                                    <span class="input-prefix" id="sym3">${DemoBackend.escapeHtml(s.currency)}</span>
+                                    <input type="number" class="form-control form-control-sm" id="studentFixedFine" value="${s.studentFixedFine}" min="0" step="1" required>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label for="professorFixedFine"><i class="fas fa-chalkboard-teacher"></i> Professor Fixed Fine</label>
+                            <div class="form-group mb-0 rates-fixed" style="${s.fineMode === 'fixed' ? '' : 'display:none'}">
+                                <label for="professorFixedFine">Professor Fixed Rate</label>
                                 <div class="input-with-prefix">
-                                    <span class="input-prefix">${DemoBackend.escapeHtml(s.currency)}</span>
-                                    <input type="number" class="form-control" id="professorFixedFine" value="${s.professorFixedFine}" min="0" step="1" required>
+                                    <span class="input-prefix" id="sym4">${DemoBackend.escapeHtml(s.currency)}</span>
+                                    <input type="number" class="form-control form-control-sm" id="professorFixedFine" value="${s.professorFixedFine}" min="0" step="1" required>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <!-- No-Return Penalty -->
-                    <div class="settings-section">
-                        <h3 class="settings-title"><i class="fas fa-ban"></i> No-Return Penalty</h3>
-                        <p class="text-muted mb-2">Maximum fine when a book is kept beyond the no-return threshold — treated as lost/unreturned.</p>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="noReturnDays">No-Return Threshold (days)</label>
-                                <input type="number" class="form-control" id="noReturnDays" value="${s.noReturnDays}" min="15" max="365" required>
-                                <span class="form-help">After this many days, the maximum penalty is applied</span>
-                            </div>
-                            <div class="form-group">
-                                <label for="noReturnFine">No-Return Penalty Amount</label>
+                            <!-- Max Penalty -->
+                            <div class="form-group mb-0">
+                                <label for="noReturnFine">Max (No-Return) Penalty</label>
                                 <div class="input-with-prefix">
-                                    <span class="input-prefix">${DemoBackend.escapeHtml(s.currency)}</span>
-                                    <input type="number" class="form-control" id="noReturnFine" value="${s.noReturnFine}" min="0" step="10" required>
+                                    <span class="input-prefix" id="sym5">${DemoBackend.escapeHtml(s.currency)}</span>
+                                    <input type="number" class="form-control form-control-sm" id="noReturnFine" value="${s.noReturnFine}" min="0" step="10" required>
                                 </div>
-                                <span class="form-help">Maximum fine (book replacement cost)</span>
                             </div>
                         </div>
                     </div>
@@ -170,6 +157,9 @@
             .preview-table th, .preview-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
             .preview-table th { background: var(--bg-body); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
             .mb-2 { margin-bottom: 12px; }
+            .mb-0 { margin-bottom: 0 !important; }
+            .pb-0 { padding-bottom: 0 !important; }
+            .form-control-sm { padding: 8px 12px; font-size: 0.9rem; }
             @media (max-width: 600px) { .fine-mode-cards { grid-template-columns: 1fr; } }
         </style>`;
 
@@ -178,15 +168,25 @@
             radio.addEventListener('change', function() {
                 document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
                 this.closest('.mode-card').classList.add('selected');
-                document.getElementById('perDaySection').style.display = this.value === 'per_day' ? '' : 'none';
-                document.getElementById('fixedSection').style.display = this.value === 'fixed' ? '' : 'none';
+                const isPerDay = this.value === 'per_day';
+                document.querySelectorAll('.rates-per-day').forEach(el => el.style.display = isPerDay ? '' : 'none');
+                document.querySelectorAll('.rates-fixed').forEach(el => el.style.display = isPerDay ? 'none' : '');
                 updatePreview();
             });
         });
 
+        // Sync currency symbol prefixes
+        document.getElementById('currency').addEventListener('input', function() {
+            const sym = this.value || '₹';
+            document.querySelectorAll('.input-prefix').forEach(el => el.textContent = sym);
+            updatePreview();
+        });
+
         // Live preview update
         document.querySelectorAll('#fineSettingsForm input, #fineSettingsForm select').forEach(inp => {
-            inp.addEventListener('input', updatePreview);
+            if (inp.id !== 'currency') {
+                inp.addEventListener('input', updatePreview);
+            }
         });
 
         updatePreview();
