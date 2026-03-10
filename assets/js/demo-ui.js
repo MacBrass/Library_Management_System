@@ -142,10 +142,7 @@ const DemoUI = (function () {
     }
 
     function renderDemoBanner() {
-        return `<div style="background: linear-gradient(135deg, #f39c12, #e67e22); color: #fff; text-align: center; padding: 6px 16px; font-size: 0.8rem; font-weight: 500; position: fixed; top: 0; left: 0; right: 0; z-index: 10000;">
-            <i class="fas fa-flask"></i> Demo Mode — Data stored in browser localStorage
-        </div>
-        <style>.topbar { margin-top: 28px !important; }</style>`;
+        return ``;
     }
 
     function initLayout(requiredRole) {
