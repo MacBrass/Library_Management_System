@@ -286,7 +286,6 @@ const DemoBackend = (function () {
         const books = getStore(KEYS.books);
         const book = books.find(b => b.id === bookId);
         if (!book) return { success: false, error: 'Book not found.' };
-        if (book.available <= 0) return { success: false, error: 'No copies of "' + book.title + '" are currently available.' };
 
         const requests = getStore(KEYS.requests);
         const duplicate = requests.find(r => r.user_id === userId && r.book_id === bookId && ['requested', 'approved', 'issued'].includes(r.status));
@@ -311,7 +310,31 @@ const DemoBackend = (function () {
         };
         requests.push(request);
         setStore(KEYS.requests, requests);
-        return { success: true, title: book.title };
+        return { success: true, title: book.title, waitlisted: book.available <= 0 };
+    }
+
+    function createCustomRequest(userId, title, author) {
+        if (!title || !author) return { success: false, error: 'Title and Author are required.' };
+        const books = getStore(KEYS.books);
+        let book = books.find(b => b.title.toLowerCase() === title.toLowerCase() && b.author.toLowerCase() === author.toLowerCase());
+        if (!book) {
+            book = {
+                id: nextId('books'),
+                title: title,
+                author: author,
+                isbn: '',
+                category: 'Custom Request',
+                publisher: '',
+                year: new Date().getFullYear(),
+                quantity: 0,
+                available: 0,
+                cover_image: '',
+                created_at: now()
+            };
+            books.push(book);
+            setStore(KEYS.books, books);
+        }
+        return createRequest(userId, book.id);
     }
 
     function createBulkRequest(bookId, studentIds) {
@@ -851,7 +874,7 @@ const DemoBackend = (function () {
         login, logout, getSession, isLoggedIn, requireAuth,
         register, getUsers, toggleUserStatus,
         getBooks, getBookById, addBook, updateBook, deleteBook, searchBooks,
-        createRequest, createBulkRequest, getRequests, approveRequest, rejectRequest, issueRequest, returnRequest,
+        createRequest, createCustomRequest, createBulkRequest, getRequests, approveRequest, rejectRequest, issueRequest, returnRequest,
         getAdminStats, getUserStats, getBorrowHistory, isBorrowLimitReached,
         getFineSettings, saveFineSettings, calculateCurrentFine, getOverdueBooks,
         generateReceipt, getReceipts, getReceiptById, generateReceiptHTML,
