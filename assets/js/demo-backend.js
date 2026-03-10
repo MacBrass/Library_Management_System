@@ -82,12 +82,33 @@ const DemoBackend = (function () {
             { id: 10, title: 'Machine Learning', author: 'Tom Mitchell', isbn: '9780070428072', category: 'Artificial Intelligence', publisher: 'McGraw Hill', year: 1997, quantity: 3, available: 3, cover_image: '', created_at: '2024-01-15 10:00:00' }
         ];
 
+        // Calculate dates to inject overdue mock data
+        const nowMs = Date.now();
+        const twoWeeksAgoMs = nowMs - (15 * 24 * 60 * 60 * 1000); // 15 days ago -> 1 day late by default
+        const twoMonthsAgoMs = nowMs - (65 * 24 * 60 * 60 * 1000); // 65 days ago -> triggers no return fine
+        
+        const twoWeeksAgoStr = new Date(twoWeeksAgoMs).toISOString().slice(0, 19).replace('T', ' ');
+        const twoMonthsAgoStr = new Date(twoMonthsAgoMs).toISOString().slice(0, 19).replace('T', ' ');
+
+        const mockRequests = [
+            { id: 1, user_id: 3, book_id: 1, status: 'issued', request_date: twoMonthsAgoStr, approval_date: twoMonthsAgoStr, issued_date: twoMonthsAgoStr, return_date: null }, // Student severe
+            { id: 2, user_id: 2, book_id: 2, status: 'issued', request_date: twoWeeksAgoStr, approval_date: twoWeeksAgoStr, issued_date: twoWeeksAgoStr, return_date: null } // Prof late
+        ];
+
+        const mockHistory = [
+            { id: 1, user_id: 3, book_id: 1, issue_date: twoMonthsAgoStr, return_date: null, fine: 0 },
+            { id: 2, user_id: 2, book_id: 2, issue_date: twoWeeksAgoStr, return_date: null, fine: 0 }
+        ];
+
+        books[0].available--; // ID 1
+        books[1].available--; // ID 2
+
         setStore(KEYS.users, users);
         setStore(KEYS.books, books);
-        setStore(KEYS.requests, []);
-        setStore(KEYS.borrowHistory, []);
+        setStore(KEYS.requests, mockRequests);
+        setStore(KEYS.borrowHistory, mockHistory);
         setStore(KEYS.receipts, []);
-        localStorage.setItem(KEYS.idCounters, JSON.stringify({ users: 3, books: 10, requests: 0, borrowHistory: 0, receipts: 0 }));
+        localStorage.setItem(KEYS.idCounters, JSON.stringify({ users: 3, books: 10, requests: 2, borrowHistory: 2, receipts: 0 }));
 
         // Default fine settings
         setStore(KEYS.fineSettings, {
@@ -251,7 +272,7 @@ const DemoBackend = (function () {
         book.year = bookData.year !== undefined ? bookData.year : book.year;
         book.quantity = bookData.quantity || book.quantity;
         book.available = Math.max(0, book.available + qtyDiff);
-        if (bookData.cover_image) book.cover_image = bookData.cover_image;
+        if (bookData.cover_image !== undefined) book.cover_image = bookData.cover_image;
 
         setStore(KEYS.books, books);
         return { success: true };
