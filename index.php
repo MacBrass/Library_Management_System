@@ -1,0 +1,121 @@
+<?php
+/**
+ * ============================================================
+ * Landing Page
+ * St. Andrew's College Library Management System
+ * ============================================================
+ * This is the public-facing homepage. It shows system features
+ * and provides links to login and register.
+ */
+
+session_start();
+
+// If user is already logged in, redirect to their dashboard
+if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
+    header("Location: " . $_SESSION['role'] . "/dashboard.php");
+    exit();
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="St. Andrew's College Digital Library Management System - Browse, request, and manage library books online.">
+    <title>St. Andrew's College - Digital Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="landing-wrapper">
+        <!-- Floating decorative shapes -->
+        <div class="floating-shape s1"></div>
+        <div class="floating-shape s2"></div>
+        <div class="floating-shape s3"></div>
+
+        <!-- Navigation -->
+        <nav class="landing-nav">
+            <div class="brand">
+                <i class="fas fa-book-open"></i>
+                <span>St. Andrew's Library</span>
+            </div>
+            <div class="btn-group">
+                <a href="auth/login.php" class="btn btn-outline" style="border-color: rgba(255,255,255,0.3); color: #fff;" id="navLoginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="auth/register.php" class="btn btn-primary" id="navRegisterBtn">
+                    <i class="fas fa-user-plus"></i> Register
+                </a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="landing-hero">
+            <h1>Digital Library Management System</h1>
+            <p>St. Andrew's College, Bandra, Mumbai — Browse our collection, request books online, and manage your reading with our modern library portal.</p>
+            <div class="btn-group">
+                <a href="auth/login.php" class="btn btn-primary btn-lg" id="heroLoginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login to Portal
+                </a>
+                <a href="auth/register.php" class="btn btn-outline btn-lg" style="border-color: rgba(255,255,255,0.3); color: #fff;" id="heroRegisterBtn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="landing-features">
+            <div class="feature-card">
+                <div class="icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3>Smart Search</h3>
+                <p>Find books instantly with our live AJAX search. Search by title, author, category, or ISBN.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">
+                    <i class="fas fa-hand-holding"></i>
+                </div>
+                <h3>Online Requests</h3>
+                <p>Request books directly from your dashboard. Track approvals and due dates in real time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h3>Role-Based Access</h3>
+                <p>Separate dashboards for Admin, Professors, and Students with appropriate permissions.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h3>Analytics Dashboard</h3>
+                <p>Admins can view library statistics, borrowing trends, and manage the entire system.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <h3>Bulk Requests</h3>
+                <p>Professors can request books on behalf of their students in bulk with a single action.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Secure System</h3>
+                <p>Built with prepared statements, session protection, and input validation for maximum security.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            <p>&copy; <?php echo date('Y'); ?> St. Andrew's College, Bandra, Mumbai. Digital Library Management System.</p>
+        </footer>
+    </div>
+</body>
+</html>

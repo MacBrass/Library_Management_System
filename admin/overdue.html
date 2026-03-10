@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overdue Books | St. Andrew's Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/demo-backend.js"></script>
+    <script src="../assets/js/demo-ui.js"></script>
+</head>
+<body>
+<script>
+    const session = DemoUI.initLayout('admin');
+    if (session) renderPage();
+
+    function renderPage() {
+        const overdue = DemoBackend.getOverdueBooks();
+        const s = DemoBackend.getFineSettings();
+        const c = s.currency;
+
+        const totalAccruedFines = overdue.reduce((sum, o) => sum + o.fine, 0);
+        const noReturnCount = overdue.filter(o => o.isNoReturn).length;
+
+        let rows = '';
+        overdue.forEach(o => {
+            const severityClass = o.isNoReturn ? 'text-danger' : (o.lateDays > 14 ? 'text-warning' : 'text-muted');
+            const severityBadge = o.isNoReturn ? '<span class="badge badge-rejected">NO RETURN</span>' : (o.lateDays > 14 ? '<span class="badge badge-requested">VERY LATE</span>' : '<span class="badge badge-issued">OVERDUE</span>');
+            const roleBadge = o.user_role === 'professor' ? 'approved' : 'requested';
+
+            rows += `<tr>
+                <td>
+                    <strong>${DemoBackend.escapeHtml(o.user_name)}</strong><br>
+                    <small class="text-muted">${DemoBackend.escapeHtml(o.user_email)}</small>
+                </td>
+                <td><span class="badge badge-${roleBadge}">${o.user_role.charAt(0).toUpperCase() + o.user_role.slice(1)}</span></td>
+                <td>
+                    <strong>${DemoBackend.escapeHtml(o.book_title)}</strong><br>
+                    <small class="text-muted">${DemoBackend.escapeHtml(o.book_author)}</small>
+                </td>
+                <td>${DemoBackend.dateOnly(o.issued_date)}</td>
+                <td>${DemoBackend.dateOnly(o.dueDate)}</td>
+                <td class="${severityClass}"><strong>${o.lateDays} day(s)</strong></td>
+                <td>${severityBadge}</td>
+                <td><strong class="text-danger">${c}${o.fine.toFixed(2)}</strong></td>
+            </tr>`;
+        });
+
+        document.getElementById('mainContent').innerHTML = `
+        <div class="page-header"><h1><i class="fas fa-exclamation-triangle"></i> Overdue Books</h1><p>Track late returns and accumulated fines in real time</p></div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-icon red"><i class="fas fa-clock"></i></div><div class="stat-info"><h3>${overdue.length}</h3><p>Total Overdue</p></div></div>
+            <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-ban"></i></div><div class="stat-info"><h3>${noReturnCount}</h3><p>No-Return (60+ days)</p></div></div>
+            <div class="stat-card"><div class="stat-icon red"><i class="fas fa-coins"></i></div><div class="stat-info"><h3>${c}${totalAccruedFines.toFixed(2)}</h3><p>Accrued Fines</p></div></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-exclamation-circle"></i> Overdue Book List</h2>
+                <button class="btn btn-sm btn-outline" onclick="renderPage()"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+            <div class="card-body">
+                ${overdue.length > 0 ? `
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>User</th><th>Role</th><th>Book</th><th>Issued</th><th>Due Date</th><th>Late By</th><th>Severity</th><th>Fine</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>` : `
+                <div class="empty-state" style="padding: 60px 20px;">
+                    <i class="fas fa-check-circle" style="color: var(--success);"></i>
+                    <h3 style="color: var(--success);">No Overdue Books!</h3>
+                    <p>All issued books are within the borrow period. Great job! 🎉</p>
+                </div>`}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h2><i class="fas fa-info-circle"></i> Current Fine Policy</h2></div>
+            <div class="card-body">
+                <div class="info-grid-simple">
+                    <div><strong>Fine Mode:</strong> ${s.fineMode === 'per_day' ? 'Per Day (accumulates daily)' : 'Fixed (one-time charge)'}</div>
+                    <div><strong>Borrow Period:</strong> ${s.borrowPeriod} days</div>
+                    ${s.fineMode === 'per_day' ?
+                        '<div><strong>Student Rate:</strong> ' + c + s.studentFinePerDay + '/day</div><div><strong>Professor Rate:</strong> ' + c + s.professorFinePerDay + '/day</div>' :
+                        '<div><strong>Student Fine:</strong> ' + c + s.studentFixedFine + '</div><div><strong>Professor Fine:</strong> ' + c + s.professorFixedFine + '</div>'}
+                    <div><strong>No-Return Threshold:</strong> ${s.noReturnDays} days</div>
+                    <div><strong>No-Return Penalty:</strong> ${c}${s.noReturnFine}</div>
+                </div>
+                <p class="mt-2"><a href="fine_settings.html" class="btn btn-sm btn-primary"><i class="fas fa-cog"></i> Change Fine Settings</a></p>
+            </div>
+        </div>
+
+        <style>
+            .info-grid-simple { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+            .info-grid-simple div { padding: 8px 12px; background: var(--bg-body); border-radius: 8px; font-size: 0.9rem; }
+            .mt-2 { margin-top: 12px; }
+        </style>`;
+    }
+</script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

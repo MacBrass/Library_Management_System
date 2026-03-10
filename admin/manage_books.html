@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Books | St. Andrew's Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/demo-backend.js"></script>
+    <script src="../assets/js/demo-ui.js"></script>
+</head>
+<body>
+<script>
+    const session = DemoUI.initLayout('admin');
+    let currentPage = 1;
+    let currentSearch = '';
+    if (session) renderPage();
+
+    function renderPage() {
+        const books = DemoBackend.getBooks({ search: currentSearch });
+        const paginated = DemoBackend.paginate(books, currentPage, 10);
+
+        let rows = '';
+        paginated.data.forEach(book => {
+            rows += `<tr>
+                <td>
+                    <div class="book-cover-thumb" style="background: var(--bg-body); display:flex; align-items:center; justify-content:center; color: var(--text-muted);">
+                        <i class="fas fa-image"></i>
+                    </div>
+                </td>
+                <td><strong>${DemoBackend.escapeHtml(book.title)}</strong></td>
+                <td>${DemoBackend.escapeHtml(book.author)}</td>
+                <td>${DemoBackend.escapeHtml(book.isbn)}</td>
+                <td>${DemoBackend.escapeHtml(book.category)}</td>
+                <td>${book.quantity}</td>
+                <td><span class="${book.available > 0 ? 'text-success' : 'text-danger'}">${book.available}</span></td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-primary" onclick='openEditModal(${JSON.stringify(book)})' title="Edit"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteBook(${book.id}, '${DemoBackend.escapeHtml(book.title).replace(/'/g, "\\'")}')" title="Delete"><i class="fas fa-trash"></i></button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+
+        document.getElementById('mainContent').innerHTML = `
+        <div class="page-header"><h1>Manage Books</h1><p>View, edit, and manage library books</p></div>
+        <div id="alertArea"></div>
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-book"></i> All Books (${books.length})</h2>
+                <div class="d-flex gap-1 align-center">
+                    <div class="search-box" style="margin: 0;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search books..." value="${DemoBackend.escapeHtml(currentSearch)}" id="bookSearchInput" onkeyup="if(event.key==='Enter'){currentSearch=this.value;currentPage=1;renderPage();}">
+                    </div>
+                    <a href="add_book.html" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Add Book</a>
+                </div>
+            </div>
+            <div class="card-body">
+                ${paginated.data.length > 0 ? `
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Cover</th><th>Title</th><th>Author</th><th>ISBN</th><th>Category</th><th>Qty</th><th>Available</th><th>Actions</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+                ${DemoUI.renderPagination(paginated, (p) => 'currentPage=' + p + '; renderPage()')}
+                ` : `<div class="empty-state"><i class="fas fa-book"></i><h3>No Books Found</h3><p>${currentSearch ? 'Try a different search term.' : 'Start by adding some books.'}</p></div>`}
+            </div>
+        </div>
+
+        <!-- Edit Modal -->
+        <div class="modal-overlay" id="editModal">
+            <div class="modal-box" style="max-width: 600px;">
+                <h3><i class="fas fa-edit"></i> Edit Book</h3>
+                <form id="editBookForm">
+                    <input type="hidden" id="editBookId">
+                    <div class="form-row">
+                        <div class="form-group"><label>Title <span class="required">*</span></label><input type="text" class="form-control" id="editTitle" required></div>
+                        <div class="form-group"><label>Author <span class="required">*</span></label><input type="text" class="form-control" id="editAuthor" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>ISBN</label><input type="text" class="form-control" id="editIsbn"></div>
+                        <div class="form-group"><label>Category</label><input type="text" class="form-control" id="editCategory"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Publisher</label><input type="text" class="form-control" id="editPublisher"></div>
+                        <div class="form-group"><label>Year</label><input type="number" class="form-control" id="editYear"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Quantity <span class="required">*</span></label><input type="number" class="form-control" id="editQuantity" min="1" required></div>
+                        <div class="form-group"></div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>`;
+
+        // Edit form handler
+        document.getElementById('editBookForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = parseInt(document.getElementById('editBookId').value);
+            const result = DemoBackend.updateBook(id, {
+                title: document.getElementById('editTitle').value.trim(),
+                author: document.getElementById('editAuthor').value.trim(),
+                isbn: document.getElementById('editIsbn').value.trim(),
+                category: document.getElementById('editCategory').value.trim(),
+                publisher: document.getElementById('editPublisher').value.trim(),
+                year: parseInt(document.getElementById('editYear').value) || 0,
+                quantity: parseInt(document.getElementById('editQuantity').value) || 1
+            });
+            closeEditModal();
+            renderPage();
+            if (result.success) DemoUI.showAlert('alertArea', 'Book updated successfully.', 'success');
+        });
+
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) closeEditModal();
+        });
+    }
+
+    function openEditModal(book) {
+        document.getElementById('editBookId').value = book.id;
+        document.getElementById('editTitle').value = book.title;
+        document.getElementById('editAuthor').value = book.author || '';
+        document.getElementById('editIsbn').value = book.isbn || '';
+        document.getElementById('editCategory').value = book.category || '';
+        document.getElementById('editPublisher').value = book.publisher || '';
+        document.getElementById('editYear').value = book.year || '';
+        document.getElementById('editQuantity').value = book.quantity;
+        document.getElementById('editModal').classList.add('show');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.remove('show');
+    }
+
+    function deleteBook(id, title) {
+        if (confirm('Are you sure you want to delete ' + title + '? This action cannot be undone.')) {
+            const result = DemoBackend.deleteBook(id);
+            if (result.success) {
+                renderPage();
+                DemoUI.showAlert('alertArea', 'Book deleted successfully.', 'success');
+            } else {
+                DemoUI.showAlert('alertArea', result.error, 'danger');
+            }
+        }
+    }
+</script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

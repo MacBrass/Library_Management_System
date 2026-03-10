@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users | St. Andrew's Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/demo-backend.js"></script>
+    <script src="../assets/js/demo-ui.js"></script>
+</head>
+<body>
+<script>
+    const session = DemoUI.initLayout('admin');
+    let currentRoleFilter = 'all';
+    let currentSearch = '';
+    let currentPage = 1;
+    if (session) renderPage();
+
+    function renderPage() {
+        const users = DemoBackend.getUsers({ role: currentRoleFilter, search: currentSearch });
+        const paginated = DemoBackend.paginate(users, currentPage, 15);
+
+        let rows = '';
+        paginated.data.forEach(u => {
+            const roleBadge = u.role === 'admin' ? 'issued' : (u.role === 'professor' ? 'approved' : 'requested');
+            let actionBtn = '';
+            if (u.id !== session.user_id) {
+                if (u.status === 'active') {
+                    actionBtn = `<a href="#" onclick="toggleStatus(${u.id}); return false;" class="btn btn-sm btn-danger" title="Deactivate"><i class="fas fa-ban"></i></a>`;
+                } else {
+                    actionBtn = `<a href="#" onclick="toggleStatus(${u.id}); return false;" class="btn btn-sm btn-success" title="Activate"><i class="fas fa-check"></i></a>`;
+                }
+            } else {
+                actionBtn = '<span class="text-muted">You</span>';
+            }
+
+            rows += `<tr>
+                <td>${u.id}</td>
+                <td><strong>${DemoBackend.escapeHtml(u.name)}</strong></td>
+                <td>${DemoBackend.escapeHtml(u.email)}</td>
+                <td><span class="badge badge-${roleBadge}">${u.role.charAt(0).toUpperCase() + u.role.slice(1)}</span></td>
+                <td>${DemoBackend.escapeHtml(u.department || '-')}</td>
+                <td><span class="badge badge-${u.status}">${u.status.charAt(0).toUpperCase() + u.status.slice(1)}</span></td>
+                <td>${DemoBackend.dateOnly(u.created_at)}</td>
+                <td>${actionBtn}</td>
+            </tr>`;
+        });
+
+        const roleFilters = [
+            { key: 'all', label: 'All' }, { key: 'admin', label: 'Admins' },
+            { key: 'professor', label: 'Professors' }, { key: 'student', label: 'Students' }
+        ];
+        const filterBtns = roleFilters.map(f =>
+            `<a href="#" onclick="currentRoleFilter='${f.key}'; currentPage=1; renderPage(); return false;" class="btn btn-sm ${currentRoleFilter === f.key ? 'btn-primary' : 'btn-outline'}">${f.label}</a>`
+        ).join('');
+
+        document.getElementById('mainContent').innerHTML = `
+        <div class="page-header"><h1>Manage Users</h1><p>View and manage system users</p></div>
+        <div id="alertArea"></div>
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-users"></i> All Users (${users.length})</h2>
+                <div class="d-flex gap-1 align-center">
+                    <div class="search-box" style="margin: 0;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search users..." value="${DemoBackend.escapeHtml(currentSearch)}" onkeyup="if(event.key==='Enter'){currentSearch=this.value;currentPage=1;renderPage();}">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="btn-group mb-2">${filterBtns}</div>
+                ${paginated.data.length > 0 ? `
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Department</th><th>Status</th><th>Registered</th><th>Actions</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+                ${DemoUI.renderPagination(paginated, (p) => 'currentPage=' + p + '; renderPage()')}
+                ` : `<div class="empty-state"><i class="fas fa-users"></i><h3>No Users Found</h3><p>No users match the current filter.</p></div>`}
+            </div>
+        </div>`;
+    }
+
+    function toggleStatus(userId) {
+        if (userId === session.user_id) {
+            DemoUI.showAlert('alertArea', 'You cannot modify your own account.', 'danger');
+            return;
+        }
+        const result = DemoBackend.toggleUserStatus(userId);
+        renderPage();
+        if (result.success) {
+            DemoUI.showAlert('alertArea', 'User ' + result.newStatus + ' successfully.', 'success');
+        }
+    }
+</script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

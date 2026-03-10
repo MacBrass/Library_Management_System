@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipts | St. Andrew's Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/demo-backend.js"></script>
+    <script src="../assets/js/demo-ui.js"></script>
+</head>
+<body>
+<script>
+    const session = DemoUI.initLayout('admin');
+    let currentFilter = '';
+    let currentPage = 1;
+    if (session) renderPage();
+
+    function renderPage() {
+        const receipts = DemoBackend.getReceipts({ type: currentFilter || undefined });
+        const paginated = DemoBackend.paginate(receipts, currentPage, 15);
+        const s = DemoBackend.getFineSettings();
+
+        let rows = '';
+        paginated.data.forEach(r => {
+            const typeBadge = r.type === 'issue' ? 'approved' : (r.type === 'return' ? (r.fine > 0 ? 'rejected' : 'returned') : 'requested');
+            const typeLabel = r.type === 'issue' ? '📖 Issue' : (r.type === 'return' ? '✅ Return' : '💰 Fine');
+
+            rows += `<tr>
+                <td><strong>${DemoBackend.escapeHtml(r.receipt_number)}</strong></td>
+                <td><span class="badge badge-${typeBadge}">${typeLabel}</span></td>
+                <td>${DemoBackend.escapeHtml(r.user_name)}<br><small class="text-muted">${r.user_role.charAt(0).toUpperCase() + r.user_role.slice(1)}</small></td>
+                <td><strong>${DemoBackend.escapeHtml(r.book_title)}</strong><br><small class="text-muted">${DemoBackend.escapeHtml(r.book_author)}</small></td>
+                <td>${DemoBackend.dateOnly(r.generated_at)}</td>
+                <td>${r.fine > 0 ? '<span class="text-danger"><strong>' + s.currency + r.fine.toFixed(2) + '</strong></span>' : '<span class="text-success">' + s.currency + '0.00</span>'}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-sm btn-primary" onclick="viewReceipt(${r.id})" title="View Receipt"><i class="fas fa-eye"></i></button>
+                        <button class="btn btn-sm btn-success" onclick="printReceipt(${r.id})" title="Print Receipt"><i class="fas fa-print"></i></button>
+                    </div>
+                </td>
+            </tr>`;
+        });
+
+        const filters = [
+            { key: '', label: 'All' },
+            { key: 'issue', label: '📖 Issue' },
+            { key: 'return', label: '✅ Return' }
+        ];
+        const filterBtns = filters.map(f =>
+            `<a href="#" onclick="currentFilter='${f.key}'; currentPage=1; renderPage(); return false;" class="btn btn-sm ${currentFilter === f.key ? 'btn-primary' : 'btn-outline'}">${f.label}</a>`
+        ).join('');
+
+        // Stats
+        const allReceipts = DemoBackend.getReceipts({});
+        const totalFines = allReceipts.filter(r => r.fine > 0).reduce((sum, r) => sum + r.fine, 0);
+        const issueCount = allReceipts.filter(r => r.type === 'issue').length;
+        const returnCount = allReceipts.filter(r => r.type === 'return').length;
+        const fineCount = allReceipts.filter(r => r.fine > 0).length;
+
+        document.getElementById('mainContent').innerHTML = `
+        <div class="page-header"><h1><i class="fas fa-receipt"></i> Digital Receipts</h1><p>View and print all issue and return receipts</p></div>
+        <div id="alertArea"></div>
+
+        <div class="stats-grid">
+            <div class="stat-card"><div class="stat-icon blue"><i class="fas fa-receipt"></i></div><div class="stat-info"><h3>${allReceipts.length}</h3><p>Total Receipts</p></div></div>
+            <div class="stat-card"><div class="stat-icon green"><i class="fas fa-book-reader"></i></div><div class="stat-info"><h3>${issueCount}</h3><p>Issue Receipts</p></div></div>
+            <div class="stat-card"><div class="stat-icon teal"><i class="fas fa-undo"></i></div><div class="stat-info"><h3>${returnCount}</h3><p>Return Receipts</p></div></div>
+            <div class="stat-card"><div class="stat-icon red"><i class="fas fa-coins"></i></div><div class="stat-info"><h3>${s.currency}${totalFines.toFixed(2)}</h3><p>Total Fines Collected</p></div></div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-list"></i> All Receipts (${receipts.length})</h2>
+                <div class="btn-group">${filterBtns}</div>
+            </div>
+            <div class="card-body">
+                ${paginated.data.length > 0 ? `
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead><tr><th>Receipt #</th><th>Type</th><th>User</th><th>Book</th><th>Date</th><th>Fine</th><th>Actions</th></tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+                ${DemoUI.renderPagination(paginated, (p) => 'currentPage=' + p + '; renderPage()')}
+                ` : `<div class="empty-state"><i class="fas fa-receipt"></i><h3>No Receipts Yet</h3><p>Receipts are generated automatically when books are issued or returned.</p></div>`}
+            </div>
+        </div>`;
+    }
+
+    function viewReceipt(id) {
+        const receipt = DemoBackend.getReceiptById(id);
+        if (!receipt) { DemoUI.showAlert('alertArea', 'Receipt not found.', 'danger'); return; }
+        const html = DemoBackend.generateReceiptHTML(receipt);
+        const win = window.open('', '_blank', 'width=700,height=900');
+        win.document.write(html);
+        win.document.close();
+    }
+
+    function printReceipt(id) {
+        const receipt = DemoBackend.getReceiptById(id);
+        if (!receipt) return;
+        const html = DemoBackend.generateReceiptHTML(receipt);
+        const win = window.open('', '_blank', 'width=700,height=900');
+        win.document.write(html);
+        win.document.close();
+        win.onload = function() { win.print(); };
+    }
+</script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

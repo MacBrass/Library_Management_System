@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Book | St. Andrew's Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/js/demo-backend.js"></script>
+    <script src="../assets/js/demo-ui.js"></script>
+</head>
+<body>
+<script>
+    const session = DemoUI.initLayout('professor');
+    let currentSearch = '';
+    let currentPage = 1;
+    if (session) renderPage();
+
+    function renderPage() {
+        const books = DemoBackend.getBooks({ search: currentSearch, sortBy: 'title' });
+        const paginated = DemoBackend.paginate(books, currentPage, 12);
+
+        let bookCards = '';
+        paginated.data.forEach(book => {
+            const avail = book.available > 0;
+            bookCards += `
+            <div class="book-card">
+                <div class="book-card-cover"><i class="fas fa-book no-cover"></i></div>
+                <div class="book-card-body">
+                    <h3>${DemoBackend.escapeHtml(book.title)}</h3>
+                    <p class="author">${DemoBackend.escapeHtml(book.author)}</p>
+                    <p class="availability ${avail ? 'in-stock' : 'out-of-stock'}">${avail ? book.available + ' copies available' : 'Currently unavailable'}</p>
+                </div>
+                <div class="book-card-footer">
+                    ${avail ? `<button class="btn btn-primary btn-sm w-100" onclick="requestBook(${book.id})"><i class="fas fa-hand-holding"></i> Request</button>` :
+                    `<button class="btn btn-outline btn-sm w-100" disabled><i class="fas fa-times-circle"></i> Unavailable</button>`}
+                </div>
+            </div>`;
+        });
+
+        document.getElementById('mainContent').innerHTML = `
+        <div class="page-header"><h1>Request a Book</h1><p>Browse and request books from the library collection</p></div>
+        <div id="alertArea"></div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex gap-1 align-center">
+                    <div class="search-box" style="max-width: 100%; flex: 1;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search by title, author, category, or ISBN..." value="${DemoBackend.escapeHtml(currentSearch)}" id="searchInput" onkeyup="if(event.key==='Enter'){currentSearch=this.value;currentPage=1;renderPage();}">
+                    </div>
+                    <button class="btn btn-primary" onclick="currentSearch=document.getElementById('searchInput').value;currentPage=1;renderPage();">Search</button>
+                    ${currentSearch ? `<a href="#" onclick="currentSearch='';currentPage=1;renderPage();return false;" class="btn btn-outline">Clear</a>` : ''}
+                </div>
+            </div>
+        </div>
+
+        <div class="books-grid">
+            ${paginated.data.length > 0 ? bookCards : '<div class="empty-state" style="grid-column: 1 / -1;"><i class="fas fa-search"></i><h3>No Books Found</h3><p>' + (currentSearch ? 'Try a different search term.' : 'No books in the library yet.') + '</p></div>'}
+        </div>
+        ${DemoUI.renderPagination(paginated, (p) => 'currentPage=' + p + '; renderPage()')}`;
+    }
+
+    function requestBook(bookId) {
+        const result = DemoBackend.createRequest(session.user_id, bookId);
+        renderPage();
+        if (result.success) {
+            DemoUI.showAlert('alertArea', 'Book "' + DemoBackend.escapeHtml(result.title) + '" requested successfully!', 'success');
+        } else {
+            DemoUI.showAlert('alertArea', result.error, 'danger');
+        }
+    }
+</script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
