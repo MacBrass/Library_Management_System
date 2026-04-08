@@ -32,9 +32,6 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
 <body>
     <div class="landing-wrapper">
         <!-- Floating decorative shapes -->
-        <div class="floating-shape s1"></div>
-        <div class="floating-shape s2"></div>
-        <div class="floating-shape s3"></div>
 
         <!-- Navigation -->
         <nav class="landing-nav">
