@@ -928,10 +928,23 @@ textarea.form-control {
     justify-content: center;
     background-color: #050505;
     background-image: 
-        linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
-    background-size: 50px 50px;
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 100% 40px;
     padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(90deg, rgba(96, 165, 250, 0.05) 2px, transparent 2px);
+    background-size: 120px 100%;
+    opacity: 0.5;
+    animation: shift-shelves 60s linear infinite;
+    pointer-events: none;
 }
 
 .auth-card {
@@ -1019,13 +1032,27 @@ textarea.form-control {
     min-height: 100vh;
     background-color: #050505;
     background-image: 
-        linear-gradient(rgba(96, 165, 250, 0.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(96, 165, 250, 0.08) 1px, transparent 1px);
-    background-size: 50px 50px;
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 100% 40px; /* Horizontal shelf lines */
     color: #f1f5f9;
     position: relative;
     overflow: hidden;
-    animation: grid-move 20s linear infinite;
+}
+
+.landing-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(90deg, rgba(96, 165, 250, 0.05) 2px, transparent 2px);
+    background-size: 120px 100%; /* Vertical intervals */
+    opacity: 0.5;
+    animation: shift-shelves 60s linear infinite;
+}
+
+@keyframes shift-shelves {
+    from { background-position: 0 0; }
+    to { background-position: 1200px 0; }
 }
 
 @keyframes grid-move {
