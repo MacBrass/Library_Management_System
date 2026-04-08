@@ -27,8 +27,10 @@ if (!$conn) {
 // Set character set to UTF-8 for proper encoding
 mysqli_set_charset($conn, "utf8mb4");
 
-// Base URL - change this for live server deployment
-define('BASE_URL', '/library-system/');
+// Base URL - Auto-detect based on folder structure
+$script_name = $_SERVER['SCRIPT_NAME'];
+$base_dir = str_replace(basename($script_name), '', $script_name);
+define('BASE_URL', $base_dir);
 
 // Upload directory for book cover images
 define('UPLOAD_DIR', __DIR__ . '/../uploads/books/');
