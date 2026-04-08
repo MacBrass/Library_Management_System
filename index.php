@@ -43,7 +43,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                 <span>Fr. CRCE Library</span>
             </div>
             <div class="btn-group">
-                <a href="auth/login.php" class="btn btn-outline" style="border-color: rgba(255,255,255,0.3); color: #fff;" id="navLoginBtn">
+                <a href="auth/login.php" class="btn btn-outline"  id="navLoginBtn">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </a>
                 <a href="auth/register.php" class="btn btn-primary" id="navRegisterBtn">
@@ -60,7 +60,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
                 <a href="auth/login.php" class="btn btn-primary btn-lg" id="heroLoginBtn">
                     <i class="fas fa-sign-in-alt"></i> Login to Portal
                 </a>
-                <a href="auth/register.php" class="btn btn-outline btn-lg" style="border-color: rgba(255,255,255,0.3); color: #fff;" id="heroRegisterBtn">
+                <a href="auth/register.php" class="btn btn-outline btn-lg"  id="heroRegisterBtn">
                     <i class="fas fa-user-plus"></i> Create Account
                 </a>
             </div>
