@@ -17,7 +17,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <div class="college-badge">
             <i class="fas fa-university"></i>
         </div>
-        <h3>FrCRCE college</h3>
+        <h3>Fr. CRCE</h3>
         <p>Bandra, Mumbai</p>
     </div>
 
@@ -123,7 +123,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </nav>
 
     <div class="sidebar-footer">
-        <p>&copy; <?php echo date('Y'); ?> FrCRCE college</p>
+        <p>&copy; <?php echo date('Y'); ?> Fr. CRCE</p>
     </div>
 </aside>
 

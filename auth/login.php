@@ -85,13 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Login to FrCRCE college Library Management System">
-    <title>Login | FrCRCE Library</title>
+    <meta name="description" content="Login to Fr. CRCE Library Management System">
+    <title>Login | Fr. CRCE Library</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Library_Management_System/assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <div class="auth-wrapper">
@@ -101,8 +101,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fas fa-book-open"></i>
                 </div>
                 <h1>Welcome Back</h1>
-                <p>FrCRCE college Library Portal</p>
+                <p>Fr. CRCE Library Portal</p>
             </div>
+
+            <div id="alertArea"></div>
+
+            <?php if (DEMO_MODE): ?>
+                <!-- Demo credentials info -->
+                <div style="background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 12px; padding: 16px; margin-bottom: 24px; font-size: 0.85rem;">
+                    <strong style="color: #6366f1; display: block; margin-bottom: 4px;"><i class="fas fa-info-circle"></i> Demo Credentials:</strong>
+                    <div style="color: #475569; line-height: 1.5;">
+                        Admin: <code>admin@frcrce.ac.in</code> / <code>Admin123</code><br>
+                        Prof: <code>prof@frcrce.ac.in</code> / <code>Prof1234</code><br>
+                        Student: <code>student@frcrce.ac.in</code> / <code>Student123</code>
+                    </div>
+                </div>
+            <?php endif; ?>
 
             <?php if ($error): ?>
                 <div class="alert alert-danger">
@@ -120,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label for="email">Email Address</label>
                     <input type="email" class="form-control" id="email" name="email" 
-                           placeholder="you@crce.edu.in" 
+                           placeholder="you@frcrce.ac.in" 
                            value="<?php echo htmlspecialchars($email ?? ''); ?>" required>
                 </div>
                 <div class="form-group">
@@ -139,6 +153,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
+    <script src="../assets/js/demo-backend.js"></script>
     <script src="../assets/js/main.js"></script>
+    <script>
+        const APP_CONFIG = {
+            demoMode: <?php echo DEMO_MODE ? 'true' : 'false'; ?>
+        };
+
+        if (APP_CONFIG.demoMode) {
+            // If already logged in via demo, redirect
+            if (DemoBackend.isLoggedIn()) {
+                const s = DemoBackend.getSession();
+                window.location.href = '../' + s.role + '/dashboard.php';
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+
+                function showAlert(msg, type) {
+                    const area = document.getElementById('alertArea');
+                    const icon = type === 'danger' ? 'exclamation-circle' : 'check-circle';
+                    area.innerHTML = '<div class="alert alert-' + type + '"><i class="fas fa-' + icon + '"></i> ' + DemoBackend.escapeHtml(msg) + '</div>';
+                }
+
+                const result = DemoBackend.login(email, password);
+                if (result.success) {
+                    window.location.href = '../' + result.role + '/dashboard.php';
+                } else {
+                    showAlert(result.error, 'danger');
+                }
+            });
+        }
+    </script>
 </body>
 </html>

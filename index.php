@@ -2,7 +2,7 @@
 /**
  * ============================================================
  * Landing Page
- * FrCRCE college Library Management System
+ * Fr. CRCE Library Management System
  * ============================================================
  * This is the public-facing homepage. It shows system features
  * and provides links to login and register.
@@ -21,13 +21,13 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FrCRCE college Digital Library Management System - Browse, request, and manage library books online.">
-    <title>FrCRCE college - Digital Library</title>
+    <meta name="description" content="Fr. CRCE Digital Library Management System - Browse, request, and manage library books online.">
+    <title>Fr. CRCE - Digital Library</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Library_Management_System/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div class="landing-wrapper">
@@ -40,7 +40,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
         <nav class="landing-nav">
             <div class="brand">
                 <i class="fas fa-book-open"></i>
-                <span>FrCRCE Library</span>
+                <span>Fr. CRCE Library</span>
             </div>
             <div class="btn-group">
                 <a href="auth/login.php" class="btn btn-outline" style="border-color: rgba(255,255,255,0.3); color: #fff;" id="navLoginBtn">
@@ -55,7 +55,7 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
         <!-- Hero Section -->
         <section class="landing-hero">
             <h1>Digital Library Management System</h1>
-            <p>FrCRCE college, Bandra, Mumbai — Browse our collection, request books online, and manage your reading with our modern library portal.</p>
+            <p>Fr. CRCE, Bandra, Mumbai — Browse our collection, request books online, and manage your reading with our modern library portal.</p>
             <div class="btn-group">
                 <a href="auth/login.php" class="btn btn-primary btn-lg" id="heroLoginBtn">
                     <i class="fas fa-sign-in-alt"></i> Login to Portal
@@ -114,8 +114,28 @@ if (isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
 
         <!-- Footer -->
         <footer class="landing-footer">
-            <p>&copy; <?php echo date('Y'); ?> FrCRCE college, Bandra, Mumbai. Digital Library Management System.</p>
+            <p>&copy; <?php echo date('Y'); ?> Fr. CRCE, Bandra, Mumbai. Digital Library Management System.</p>
         </footer>
     </div>
+
+    <script src="assets/js/demo-backend.js"></script>
+    <script>
+        const APP_CONFIG = {
+            demoMode: <?php echo DEMO_MODE ? 'true' : 'false'; ?>
+        };
+
+        if (APP_CONFIG.demoMode) {
+            // If already logged in via demo, redirect
+            if (DemoBackend.isLoggedIn()) {
+                const s = DemoBackend.getSession();
+                window.location.href = s.role + '/dashboard.php';
+            }
+            
+            // Fix links in demo mode to point to .php copies
+            document.querySelectorAll('a[href$=".html"]').forEach(link => {
+                link.href = link.href.replace('.html', '.php');
+            });
+        }
+    </script>
 </body>
 </html>

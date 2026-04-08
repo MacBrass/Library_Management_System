@@ -12,9 +12,9 @@
 echo "=== Password Hash Generator ===\n\n";
 
 $passwords = [
-    'Admin123'    => 'admin@crce.edu.in',
-    'Prof1234'    => 'prof@crce.edu.in',
-    'Student123'  => 'student@crce.edu.in',
+    'Admin123'    => 'admin@frcrce.ac.in',
+    'Prof1234'    => 'prof@frcrce.ac.in',
+    'Student123'  => 'student@frcrce.ac.in',
 ];
 
 foreach ($passwords as $pass => $email) {

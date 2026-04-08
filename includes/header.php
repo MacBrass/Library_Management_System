@@ -12,8 +12,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="FrCRCE college Library Management System - Digital Library Portal">
-    <title><?php echo isset($page_title) ? htmlspecialchars($page_title) . ' | ' : ''; ?>FrCRCE Library</title>
+    <meta name="description" content="Fr. CRCE Library Management System - Digital Library Portal">
+    <title><?php echo isset($page_title) ? htmlspecialchars($page_title) . ' | ' : ''; ?>Fr. CRCE Library</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
             </button>
             <div class="brand">
                 <i class="fas fa-book-open brand-icon"></i>
-                <span class="brand-text">FrCRCE Library</span>
+                <span class="brand-text">Fr. CRCE Library</span>
             </div>
         </div>
         <div class="topbar-right">

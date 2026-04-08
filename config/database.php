@@ -2,7 +2,7 @@
 /**
  * ============================================================
  * Database Configuration
- * FrCRCE college Library Management System
+ * Fr. CRCE Library Management System
  * ============================================================
  * 
  * Modify these credentials to match your server setup.
@@ -17,20 +17,19 @@ define('DB_PASS', '');             // Change for live server
 define('DB_NAME', 'library_db');
 
 // Create database connection using MySQLi
-$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
+$conn = @mysqli_connect(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-// Check connection - halt on error
+// Check connection - set Demo Mode instead of halting
 if (!$conn) {
-    die("Database connection failed: " . mysqli_connect_error());
+    define('DEMO_MODE', true);
+} else {
+    define('DEMO_MODE', false);
+    // Set character set to UTF-8 for proper encoding
+    mysqli_set_charset($conn, "utf8mb4");
 }
 
-// Set character set to UTF-8 for proper encoding
-mysqli_set_charset($conn, "utf8mb4");
-
-// Base URL - Auto-detect based on folder structure
-$script_name = $_SERVER['SCRIPT_NAME'];
-$base_dir = str_replace(basename($script_name), '', $script_name);
-define('BASE_URL', $base_dir);
+// Base URL - change this for live server deployment
+define('BASE_URL', '/library-system/');
 
 // Upload directory for book cover images
 define('UPLOAD_DIR', __DIR__ . '/../uploads/books/');

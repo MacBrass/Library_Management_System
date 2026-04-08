@@ -92,13 +92,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Register for FrCRCE college Library Management System">
-    <title>Register | FrCRCE Library</title>
+    <meta name="description" content="Register for Fr. CRCE Library Management System">
+    <title>Register | Fr. CRCE Library</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/Library_Management_System/assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
     <div class="auth-wrapper">
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fas fa-user-plus"></i>
                 </div>
                 <h1>Create Account</h1>
-                <p>Join FrCRCE college Library Portal</p>
+                <p>Join Fr. CRCE Library Portal</p>
             </div>
 
             <?php if ($error): ?>
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label for="email">Email Address <span class="required">*</span></label>
                     <input type="email" class="form-control" id="email" name="email" 
-                           placeholder="you@crce.edu.in" 
+                           placeholder="you@frcrce.ac.in" 
                            value="<?php echo htmlspecialchars($email); ?>" required>
                 </div>
                 <div class="form-group">
@@ -165,6 +165,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
+    <script src="../assets/js/demo-backend.js"></script>
     <script src="../assets/js/main.js"></script>
+    <script>
+        const APP_CONFIG = {
+            demoMode: <?php echo DEMO_MODE ? 'true' : 'false'; ?>
+        };
+
+        if (APP_CONFIG.demoMode) {
+            // If already logged in via demo, redirect
+            if (DemoBackend.isLoggedIn()) {
+                const s = DemoBackend.getSession();
+                window.location.href = '../' + s.role + '/dashboard.php';
+            }
+
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = document.getElementById('role').value;
+                const department = document.getElementById('department').value.trim();
+
+                const result = DemoBackend.register(name, email, password, role, department);
+                if (result.success) {
+                    window.location.href = 'login.php?success=Registration successful! Please login.';
+                } else {
+                    // Implement showAlert for this page
+                    const area = document.createElement('div');
+                    area.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ' + DemoBackend.escapeHtml(result.error) + '</div>';
+                    document.querySelector('.auth-card').insertBefore(area, document.getElementById('registerForm'));
+                }
+            });
+        }
+    </script>
 </body>
 </html>

@@ -1,101 +1,32 @@
-# FrCRCE college Library Management System
+# Fr. CRCE Library Management System
 
-A modern, web-based Library Management System designed for **FrCRCE college, Bandra, Mumbai**. This system provides a seamless digital interface for students, professors, and administrators to manage book collections, requests, and borrowing transactions.
+This repository contains the library management system for Fr. CRCE.
 
----
+## Two Architecture Versions
 
-## 🚀 Key Features
+This project ships with two distinct implementations to suit different environments. When making changes, it is important to remember what files serve each version.
 
-### 👥 Role-Based Access Control
-- **Admin Dashboard**: Full control over users, book inventory, fine settings, and system-wide analytics.
-- **Professor Dashboard**: Browse books, request books on behalf of students (bulk), and manage personal borrowing history.
-- **Student Dashboard**: Search for books, track current requests, view due dates, and monitor fines.
+### 1. PHP Version (Live Backend Server)
+- **Environment**: Designed to run via XAMPP/WAMP or a remote Apache/Nginx web server with PHP support.
+- **Files**: All `.php` files (e.g., `index.php`, `auth/login.php`, `student/dashboard.php`).
+- **Data Source**: Connects to the local MySQL database defined in `config/database.php`. Needs the `library_db.sql` imported.
+- **Logic**: Handles login, sessions, and book data via standard PHP backend processing.
 
-### 📚 Advanced Book Management
-- **Smart AJAX Search**: Find books instantly by Title, Author, Category, or ISBN without page reloads.
-- **Request Lifecycle**: Intelligent status tracking from `Requested` → `Approved` → `Issued` → `Returned`.
-- **Automatic Fines**: System calculates overdue fines based on configurable per-role settings.
+### 2. Live HTML/JS Version (Static Server / Local Testing)
+- **Environment**: Designed to run cleanly as static files (via a basic Live Server or directly in the browser).
+- **Files**: All `.html` files (e.g., `index.html`, `auth/login.html`, `student/dashboard.html`).
+- **Data Source**: Uses mock data arrays heavily defined in `assets/js/demo-backend.js`.
+- **Logic**: All session and database mimicry is done inside the browser utilizing JavaScript localStorage (`demo-backend.js` and `demo-ui.js`).
 
-### 🏛️ Digital Receipts & Reports
-- **Receipt Generation**: Professional PDF/HTML receipts for every book issuance and return.
-- **Borrowing History**: Complete digital trail of all past transactions.
+## Keeping Versions Synced
+If you apply styling, UI alignment (`style.css`), or structural updates, ensure those changes are duplicated to **both** the `.html` variant and the corresponding `.php` file.
 
-### 🛡️ Security First
-- **BCRYPT Hashing**: All user passwords are securely hashed using modern bcrypt standards.
-- **SQL Injection Protection**: Built with prepared statements for all database interactions.
-- **Session Protection**: Secure session management to prevent unauthorized access.
+**Shared Assets:**
+Both versions actively share the `assets/` folder (such as `main.js`, `style.css`), so design updates inside `assets/css/style.css` apply automatically to both versions. However, if you add a new element to HTML structurally, don't forget to push it to the PHP version too!
 
----
+## Test Accounts
 
-## 🛠️ Technology Stack
-
-- **Backend**: PHP (Vanilla)
-- **Database**: MySQL / MariaDB
-- **Frontend**: HTML5, Modern CSS3 (Variables, Flexbox, Grid), JavaScript (AJAX)
-- **Assets**: FontAwesome 6, Google Fonts (Inter)
-
----
-
-## 📂 Project Structure
-
-```text
-library-system/
-├── admin/          # Admin-specific controllers and views
-├── assets/         # CSS, JS, and Images
-├── auth/           # Login, Registration, and Logout logic
-├── config/         # Database and global configuration
-├── includes/       # Shared components (navbar, sidebar, etc.)
-├── professor/      # Professor-specific dashboards
-├── search/         # AJAX search handlers
-├── student/        # Student-specific dashboards
-├── uploads/        # Directory for book cover images
-├── library_db.sql  # Database schema and sample data
-└── setup.php       # Initial system configuration script
-```
-
----
-
-## ⚙️ Installation Guide
-
-### 1. Prerequisites
-- **Web Server**: XAMPP, WAMP, MAMP, or any PHP server environment.
-- **PHP Version**: 7.4 or higher recommended.
-- **MySQL Version**: 5.7 or higher.
-
-### 2. Database Setup
-1. Open your database management tool (e.g., phpMyAdmin).
-2. Create a new database named `library_db`.
-3. Import the `library_db.sql` file located in the `library-system/` folder.
-
-### 3. Configuration
-1. Open `library-system/config/database.php`.
-2. Update the following constants to match your environment:
-   ```php
-   define('DB_HOST', 'localhost');
-   define('DB_USER', 'root');   // Your DB username
-   define('DB_PASS', '');       // Your DB password
-   define('DB_NAME', 'library_db');
-   ```
-
-### 4. Finalizing Setup
-1. Point your browser to: `http://localhost/library-system/setup.php`
-2. This script will:
-   - Verify the database connection.
-   - Generate secure password hashes for sample accounts.
-   - Confirm table structure.
-3. **IMPORTANT**: Delete `setup.php` after the installation is complete for security reasons.
-
----
-
-## 🔑 Default Login Credentials
-
-| Role | Email | Password |
-| :--- | :--- | :--- |
-| **Admin** | `admin@crce.edu.in` | `Admin123` |
-| **Professor** | `prof@crce.edu.in` | `Prof1234` |
-| **Student** | `student@crce.edu.in` | `Student123` |
-
----
-
-## 📝 License
-This project is developed for **FrCRCE college, Mumbai**. All rights reserved.
+For the static HTML version (`demo-backend.js`), these default credentials exist:
+- **Admin**: `admin@frcrce.ac.in` / `Admin123`
+- **Professor**: `prof@frcrce.ac.in` / `Prof1234`
+- **Student**: `student@frcrce.ac.in` / `Student123`

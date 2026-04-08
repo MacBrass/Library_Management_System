@@ -1,7 +1,7 @@
 /**
  * ============================================================
  * Demo Backend - localStorage-based Mock Database
- * FrCRCE college Library Management System
+ * Fr. CRCE Library Management System
  * ============================================================
  * This file simulates the MySQL database using localStorage
  * so the app can run on VS Code Live Server without XAMPP.
@@ -64,9 +64,9 @@ const DemoBackend = (function () {
         if (localStorage.getItem(KEYS.seeded) === 'v2') return;
 
         const users = [
-            { id: 1, name: 'Admin User', email: 'admin@crce.edu.in', password: 'Admin123', role: 'admin', department: 'Administration', status: 'active', created_at: '2024-01-15 10:00:00' },
-            { id: 2, name: 'Prof. Sharma', email: 'prof@crce.edu.in', password: 'Prof1234', role: 'professor', department: 'Computer Science', status: 'active', created_at: '2024-01-20 10:00:00' },
-            { id: 3, name: 'Rahul Verma', email: 'student@crce.edu.in', password: 'Student123', role: 'student', department: 'Computer Science', status: 'active', created_at: '2024-02-01 10:00:00' }
+            { id: 1, name: 'Admin User', email: 'admin@frcrce.ac.in', password: 'Admin123', role: 'admin', department: 'Administration', status: 'active', created_at: '2024-01-15 10:00:00' },
+            { id: 2, name: 'Prof. Sharma', email: 'prof@frcrce.ac.in', password: 'Prof1234', role: 'professor', department: 'Computer Science', status: 'active', created_at: '2024-01-20 10:00:00' },
+            { id: 3, name: 'Rahul Verma', email: 'student@frcrce.ac.in', password: 'Student123', role: 'student', department: 'Computer Science', status: 'active', created_at: '2024-02-01 10:00:00' }
         ];
 
         const books = [
@@ -816,7 +816,7 @@ const DemoBackend = (function () {
             '@media print{body{background:#fff;padding:0}.receipt{box-shadow:none}.action-bar{display:none!important}}' +
             '</style></head><body>' +
             '<div class="receipt">' +
-            '<div class="receipt-header"><div class="logo">\ud83d\udcda</div><h1>FrCRCE Library</h1><p>Bandra, Mumbai</p></div>' +
+            '<div class="receipt-header"><div class="logo">\ud83d\udcda</div><h1>St. Andrew\'s College Library</h1><p>Bandra, Mumbai</p></div>' +
             '<div class="receipt-type"><span class="type-' + receipt.type + '">' + typeLabel + '</span></div>' +
             '<div class="receipt-body">' +
             '<div class="receipt-number">Receipt No: <strong>' + receipt.receipt_number + '</strong><br>Date: ' + generatedDateStr + '</div>' +
@@ -838,7 +838,7 @@ const DemoBackend = (function () {
             '</div></div>' +
             fineSection +
             '</div>' +
-            '<div class="receipt-footer"><p><strong>FrCRCE Library</strong><br>Bandra (W), Mumbai 400 050<br>Computer-generated receipt. No signature required.</p></div>' +
+            '<div class="receipt-footer"><p><strong>St. Andrew\'s College Library</strong><br>Bandra (W), Mumbai 400 050<br>Computer-generated receipt. No signature required.</p></div>' +
             '</div>' +
             '<div class="action-bar"><button class="btn-print" onclick="window.print()">Print Receipt</button>' +
             '<button class="btn-pdf" onclick="alert(\'Use Print > Save as PDF\');window.print()">Save as PDF</button></div>' +

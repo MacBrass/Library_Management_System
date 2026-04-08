@@ -1,7 +1,7 @@
 /**
  * ============================================================
  * Main JavaScript
- * FrCRCE college Library Management System
+ * Fr. CRCE Library Management System
  * ============================================================
  */
 
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function fetchSearchResults(query) {
             // Determine base URL from the page
             const baseUrl = document.querySelector('meta[name="base-url"]');
-            const base = baseUrl ? baseUrl.content : '/Library_Mangement_System/';
+            const base = baseUrl ? baseUrl.content : '/library-system/';
 
             fetch(base + 'search/search_books.php?q=' + encodeURIComponent(query))
                 .then(response => response.json())
