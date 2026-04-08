@@ -523,10 +523,10 @@ img {
 
 .form-group label {
     display: block;
-    font-weight: 500;
+    margin-bottom: 8px;
     font-size: 0.9rem;
-    color: var(--text-primary);
-    margin-bottom: 6px;
+    font-weight: 600;
+    color: #f1f5f9; /* Brightened globally */
 }
 
 .form-group label .required {
@@ -536,23 +536,23 @@ img {
 .form-control {
     width: 100%;
     padding: 10px 14px;
-    border: 1.5px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
     font-family: inherit;
     font-size: 0.9rem;
-    color: var(--text-primary);
-    background: var(--bg-card);
+    color: #ffffff; /* Bright text */
+    background: rgba(255, 255, 255, 0.05);
     transition: var(--transition);
     outline: none;
 }
 
 .form-control:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    border-color: #60a5fa;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .form-control::placeholder {
-    color: var(--text-muted);
+    color: #64748b; /* Brighter placeholder */
 }
 
 select.form-control {
@@ -926,22 +926,21 @@ textarea.form-control {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #f1f5f9;
+    background-color: #050505;
     background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
+        linear-gradient(rgba(96, 165, 250, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
     padding: 20px;
 }
 
 .auth-card {
     width: 100%;
     max-width: 440px;
-    background: var(--bg-card);
-    border-radius: var(--radius-md);
-    box-shadow: 
-        0 10px 25px -5px rgba(0, 0, 0, 0.05),
-        0 8px 10px -6px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(226, 232, 240, 0.8);
+    background: #11141a;
+    border-radius: 8px; /* Consistent sharp corners */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 40px;
     animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -971,16 +970,16 @@ textarea.form-control {
 }
 
 .auth-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: #1e293b;
+    color: #ffffff;
     margin-bottom: 8px;
     letter-spacing: -0.025em;
 }
 
 .auth-header p {
     font-size: 0.95rem;
-    color: #64748b;
+    color: #94a3b8;
 }
 
 .auth-form .form-group {
