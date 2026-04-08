@@ -1,7 +1,7 @@
 /**
  * ============================================================
  * Main JavaScript
- * St. Andrew's College Library Management System
+ * FrCRCE college Library Management System
  * ============================================================
  */
 

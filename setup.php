@@ -22,7 +22,7 @@ echo ".box{background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 10px
 echo ".success{color:#27ae60;}.error{color:#e74c3c;}.info{color:#3498db;}";
 echo "h1{color:#2c3e50;}h2{color:#34495e;}pre{background:#f0f2f5;padding:10px;border-radius:6px;overflow-x:auto;}</style></head><body>";
 
-echo "<h1>🏛️ St. Andrew's Library - Setup</h1>";
+echo "<h1>🏛️ FrCRCE Library - Setup</h1>";
 
 // Test database connection
 echo "<div class='box'>";
@@ -63,9 +63,9 @@ echo "<div class='box'>";
 echo "<h2>Setting Up Sample Users</h2>";
 
 $users = [
-    ['email' => 'admin@andrews.edu',   'password' => 'Admin123',    'name' => 'Admin User',    'role' => 'admin',     'department' => 'Administration'],
-    ['email' => 'prof@andrews.edu',    'password' => 'Prof1234',    'name' => 'Prof. Sharma',  'role' => 'professor', 'department' => 'Computer Science'],
-    ['email' => 'student@andrews.edu', 'password' => 'Student123',  'name' => 'Rahul Verma',   'role' => 'student',   'department' => 'Computer Science'],
+    ['email' => 'admin@crce.edu.in',   'password' => 'Admin123',    'name' => 'Admin User',    'role' => 'admin',     'department' => 'Administration'],
+    ['email' => 'prof@crce.edu.in',    'password' => 'Prof1234',    'name' => 'Prof. Sharma',  'role' => 'professor', 'department' => 'Computer Science'],
+    ['email' => 'student@crce.edu.in', 'password' => 'Student123',  'name' => 'Rahul Verma',   'role' => 'student',   'department' => 'Computer Science'],
 ];
 
 foreach ($users as $user) {
@@ -105,13 +105,13 @@ echo "<div class='box'>";
 echo "<h2>📋 Login Credentials</h2>";
 echo "<pre>";
 echo "Admin Login:\n";
-echo "  Email:    admin@andrews.edu\n";
+echo "  Email:    admin@crce.edu.in\n";
 echo "  Password: Admin123\n\n";
 echo "Professor Login:\n";
-echo "  Email:    prof@andrews.edu\n";
+echo "  Email:    prof@crce.edu.in\n";
 echo "  Password: Prof1234\n\n";
 echo "Student Login:\n";
-echo "  Email:    student@andrews.edu\n";
+echo "  Email:    student@crce.edu.in\n";
 echo "  Password: Student123\n";
 echo "</pre>";
 echo "</div>";

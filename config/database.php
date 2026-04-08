@@ -2,7 +2,7 @@
 /**
  * ============================================================
  * Database Configuration
- * St. Andrew's College Library Management System
+ * FrCRCE college Library Management System
  * ============================================================
  * 
  * Modify these credentials to match your server setup.

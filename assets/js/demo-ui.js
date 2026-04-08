@@ -1,7 +1,7 @@
 /**
  * ============================================================
  * Demo UI Helpers
- * St. Andrew's College Library Management System
+ * FrCRCE college Library Management System
  * ============================================================
  * Shared UI rendering functions for demo HTML pages.
  * Generates the topbar, sidebar, and common UI components.
@@ -20,7 +20,7 @@ const DemoUI = (function () {
                 </button>
                 <div class="brand">
                     <i class="fas fa-book-open brand-icon"></i>
-                    <span class="brand-text">St. Andrew's Library</span>
+                    <span class="brand-text">FrCRCE Library</span>
                 </div>
             </div>
             <div class="topbar-right">
@@ -124,12 +124,12 @@ const DemoUI = (function () {
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="college-badge"><i class="fas fa-university"></i></div>
-                <h3>St. Andrew's College</h3>
+                <h3>FrCRCE college</h3>
                 <p>Bandra, Mumbai</p>
             </div>
             <nav class="sidebar-nav">${navContent}</nav>
             <div class="sidebar-footer">
-                <p>&copy; 2026 St. Andrew's College</p>
+                <p>&copy; 2026 FrCRCE college</p>
             </div>
         </aside>
         <main class="main-content" id="mainContent">`;

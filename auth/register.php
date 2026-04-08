@@ -92,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Register for St. Andrew's College Library Management System">
-    <title>Register | St. Andrew's Library</title>
+    <meta name="description" content="Register for FrCRCE college Library Management System">
+    <title>Register | FrCRCE Library</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fas fa-user-plus"></i>
                 </div>
                 <h1>Create Account</h1>
-                <p>Join St. Andrew's College Library Portal</p>
+                <p>Join FrCRCE college Library Portal</p>
             </div>
 
             <?php if ($error): ?>
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label for="email">Email Address <span class="required">*</span></label>
                     <input type="email" class="form-control" id="email" name="email" 
-                           placeholder="you@andrews.edu" 
+                           placeholder="you@crce.edu.in" 
                            value="<?php echo htmlspecialchars($email); ?>" required>
                 </div>
                 <div class="form-group">

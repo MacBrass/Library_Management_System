@@ -1,5 +1,5 @@
 /* ============================================================
-   St. Andrew's College Library Management System
+   FrCRCE college Library Management System
    Main Stylesheet
    ============================================================ */
 
@@ -1072,6 +1072,8 @@ textarea.form-control {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    z-index: 10;
 }
 
 .landing-nav .brand {
@@ -1190,6 +1192,7 @@ textarea.form-control {
     border-radius: 50%;
     opacity: 0.06;
     background: var(--accent);
+    pointer-events: none;
 }
 
 .floating-shape.s1 {

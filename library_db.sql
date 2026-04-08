@@ -1,6 +1,6 @@
 -- ============================================================
 -- Library Management System - Database Schema
--- St. Andrew's College, Bandra, Mumbai
+-- FrCRCE college, Bandra, Mumbai
 -- ============================================================
 -- Run this SQL in phpMyAdmin or MySQL CLI to set up the database
 
@@ -126,17 +126,17 @@ CREATE TABLE IF NOT EXISTS receipts (
 -- to generate correct bcrypt password hashes.
 -- ============================================================
 
--- Admin: admin@andrews.edu / Admin123
+-- Admin: admin@crce.edu.in / Admin123
 INSERT INTO users (name, email, password, role, department, status) VALUES
-('Admin User', 'admin@andrews.edu', '$2y$10$8K1p/a0dL1LXMIgoEDFrwOfc7T5UYX3h4k9xG0kCQ0ep5QgYfKyVu', 'admin', 'Administration', 'active');
+('Admin User', 'admin@crce.edu.in', '$2y$10$8K1p/a0dL1LXMIgoEDFrwOfc7T5UYX3h4k9xG0kCQ0ep5QgYfKyVu', 'admin', 'Administration', 'active');
 
--- Professor: prof@andrews.edu / Prof1234
+-- Professor: prof@crce.edu.in / Prof1234
 INSERT INTO users (name, email, password, role, department, status) VALUES
-('Prof. Sharma', 'prof@andrews.edu', '$2y$10$Nh8JzV7z8K9L2xQ3eUYVxeS5c3T5hGEqMzmVkLXoJrBp5KpVNfjdC', 'professor', 'Computer Science', 'active');
+('Prof. Sharma', 'prof@crce.edu.in', '$2y$10$Nh8JzV7z8K9L2xQ3eUYVxeS5c3T5hGEqMzmVkLXoJrBp5KpVNfjdC', 'professor', 'Computer Science', 'active');
 
--- Student: student@andrews.edu / Student123
+-- Student: student@crce.edu.in / Student123
 INSERT INTO users (name, email, password, role, department, status) VALUES
-('Rahul Verma', 'student@andrews.edu', '$2y$10$GZ8KQOYqKJEf4v5h3t2CnO8V8d5yX7kLp2Qr9NmEAJfW3bGhRfS0y', 'student', 'Computer Science', 'active');
+('Rahul Verma', 'student@crce.edu.in', '$2y$10$GZ8KQOYqKJEf4v5h3t2CnO8V8d5yX7kLp2Qr9NmEAJfW3bGhRfS0y', 'student', 'Computer Science', 'active');
 
 -- ============================================================
 -- Insert Sample Books
