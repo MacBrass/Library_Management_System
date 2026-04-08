@@ -588,21 +588,22 @@ textarea.form-control {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 10px 20px;
+    gap: 10px;
+    padding: 12px 24px;
     border: none;
-    border-radius: var(--radius-sm);
+    border-radius: 12px;
     font-family: inherit;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     line-height: 1.4;
     white-space: nowrap;
 }
 
 .btn:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
 .btn:active {
@@ -610,55 +611,36 @@ textarea.form-control {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
-    color: var(--text-white);
-    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
 }
 
 .btn-primary:hover {
-    box-shadow: 0 4px 14px rgba(52, 152, 219, 0.4);
+    background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+    box-shadow: 0 12px 20px -5px rgba(99, 102, 241, 0.3);
 }
 
 .btn-success {
-    background: linear-gradient(135deg, var(--success), var(--success-light));
-    color: var(--text-white);
-    box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
-}
-
-.btn-success:hover {
-    box-shadow: 0 4px 14px rgba(39, 174, 96, 0.4);
+    background: #10b981;
+    color: #ffffff;
 }
 
 .btn-danger {
-    background: linear-gradient(135deg, var(--danger), var(--danger-light));
-    color: var(--text-white);
-    box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
-}
-
-.btn-danger:hover {
-    box-shadow: 0 4px 14px rgba(231, 76, 60, 0.4);
-}
-
-.btn-warning {
-    background: linear-gradient(135deg, var(--warning), var(--warning-light));
-    color: var(--text-white);
-    box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
-}
-
-.btn-warning:hover {
-    box-shadow: 0 4px 14px rgba(243, 156, 18, 0.4);
+    background: #ef4444;
+    color: #ffffff;
 }
 
 .btn-outline {
     background: transparent;
-    border: 1.5px solid var(--border-color);
-    color: var(--text-primary);
+    border: 2px solid rgba(226, 232, 240, 0.8);
+    color: #475569;
 }
 
 .btn-outline:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(52, 152, 219, 0.05);
+    border-color: #6366f1;
+    color: #6366f1;
+    background: #f5f3ff;
 }
 
 .btn-sm {

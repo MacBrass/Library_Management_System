@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const baseUrl = document.querySelector('meta[name="base-url"]');
             const base = baseUrl ? baseUrl.content : '/library-system/';
 
-            fetch(base + 'search/search_books.php?q=' + encodeURIComponent(query))
+            fetch(base + 'search/search_books.html?q=' + encodeURIComponent(query))
                 .then(response => response.json())
                 .then(data => {
                     if (data.length === 0) {

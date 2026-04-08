@@ -1,0 +1,104 @@
+
+
+<div class="page-header">
+    <h1>Request a Book</h1>
+    <p>Browse and request books from the library</p>
+</div>
+
+
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> 
+    </div>
+
+
+
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> 
+    </div>
+
+
+<!-- Search -->
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="GET" action="" class="d-flex gap-1 align-center">
+            <div class="search-box" style="max-width: 100%; flex: 1;">
+                <i class="fas fa-search"></i>
+                <input type="text" name="search" placeholder="Search by title, author, category, or ISBN..." 
+                       value="" id="liveSearchInput">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+            
+                <a href="request_book.html" class="btn btn-outline">Clear</a>
+            
+        </form>
+    </div>
+</div>
+
+<meta name="base-url" content="">
+
+<!-- Books Grid -->
+<div class="books-grid">
+    
+        
+            <div class="book-card">
+                <div class="book-card-cover">
+                    
+                        <img src="uploads/books/" 
+                             alt="">
+                    
+                        <i class="fas fa-book no-cover"></i>
+                    
+                </div>
+                <div class="book-card-body">
+                    <h3></h3>
+                    <p class="author"></p>
+                    <p class="availability ">
+                        
+                    </p>
+                </div>
+                <div class="book-card-footer">
+                    
+                        <form method="POST" action="" style="margin: 0;">
+                            <input type="hidden" name="book_id" value="">
+                            <button type="submit" class="btn btn-primary btn-sm w-100">
+                                <i class="fas fa-hand-holding"></i> Request
+                            </button>
+                        </form>
+                    
+                        <button class="btn btn-outline btn-sm w-100" disabled>
+                            <i class="fas fa-times-circle"></i> Unavailable
+                        </button>
+                    
+                </div>
+            </div>
+        
+    
+        <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="fas fa-search"></i>
+            <h3>No Books Found</h3>
+            <p></p>
+        </div>
+    
+</div>
+
+<!-- Pagination -->
+
+    <div class="pagination">
+        
+            <a href="?page=&search="><i class="fas fa-chevron-left"></i></a>
+        
+        
+            
+                <span class="active"></span>
+            
+                <a href="?page=&search="></a>
+            
+        
+        
+            <a href="?page=&search="><i class="fas fa-chevron-right"></i></a>
+        
+    </div>
+
+
+

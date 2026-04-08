@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Register for Fr. CRCE Library Management System">
+    <title>Register | Fr. CRCE Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="auth-wrapper">
+        <div class="auth-card" style="max-width: 500px;">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h1>Create Account</h1>
+                <p>Join Fr. CRCE Library Portal</p>
+            </div>
+
+            
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> 
+                </div>
+            
+
+            <form class="auth-form" method="POST" action="" id="registerForm">
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="name" name="name" 
+                           placeholder="Enter your full name" 
+                           value="" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email" 
+                           placeholder="you@frcrce.ac.in" 
+                           value="" required>
+                </div>
+                <div class="form-group">
+                    <label for="role">I am a <span class="required">*</span></label>
+                    <select class="form-control" id="role" name="role" required>
+                        <option value="student" >Student</option>
+                        <option value="professor" >Professor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="department">Department</label>
+                    <input type="text" class="form-control" id="department" name="department" 
+                           placeholder="e.g., Computer Science" 
+                           value="">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password <span class="required">*</span></label>
+                    <input type="password" class="form-control" id="password" name="password" 
+                           placeholder="Minimum 8 chars, 1 uppercase, 1 number" required>
+                    <span class="form-help">Min 8 characters, at least one uppercase letter and one number</span>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password <span class="required">*</span></label>
+                    <input type="password" class="form-control" id="confirmPassword" name="confirm_password" 
+                           placeholder="Re-enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="registerSubmitBtn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Already have an account? <a href="login.html">Login here</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/demo-backend.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script>
+        const APP_CONFIG = {
+            demoMode: 
+        };
+
+        if (APP_CONFIG.demoMode) {
+            // If already logged in via demo, redirect
+            if (DemoBackend.isLoggedIn()) {
+                const s = DemoBackend.getSession();
+                window.location.href = '../' + s.role + '/dashboard.html';
+            }
+
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const role = document.getElementById('role').value;
+                const department = document.getElementById('department').value.trim();
+
+                const result = DemoBackend.register(name, email, password, role, department);
+                if (result.success) {
+                    window.location.href = 'login.html?success=Registration successful! Please login.';
+                } else {
+                    // Implement showAlert for this page
+                    const area = document.createElement('div');
+                    area.innerHTML = '<div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> ' + DemoBackend.escapeHtml(result.error) + '</div>';
+                    document.querySelector('.auth-card').insertBefore(area, document.getElementById('registerForm'));
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+
+
+<div class="page-header">
+    <h1>Book Requests</h1>
+    <p>Manage book requests, approvals, and returns</p>
+</div>
+
+
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> 
+    </div>
+
+
+
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> 
+    </div>
+
+
+<!-- Filter Tabs -->
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-clipboard-list"></i> Requests ()</h2>
+        <div class="btn-group">
+            <a href="?filter=all" class="btn btn-sm ">All</a>
+            <a href="?filter=requested" class="btn btn-sm ">Pending</a>
+            <a href="?filter=approved" class="btn btn-sm ">Approved</a>
+            <a href="?filter=issued" class="btn btn-sm ">Issued</a>
+            <a href="?filter=returned" class="btn btn-sm ">Returned</a>
+            <a href="?filter=rejected" class="btn btn-sm ">Rejected</a>
+        </div>
+    </div>
+    <div class="card-body">
+        
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>User</th>
+                            <th>Role</th>
+                            <th>Book</th>
+                            <th>Status</th>
+                            <th>Requested</th>
+                            <th>Issued</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <strong></strong>
+                                    <br><small class="text-muted"></small>
+                                </td>
+                                <td><span class="badge badge-"></span></td>
+                                <td>
+                                    <strong></strong>
+                                    <br><small class="text-muted"></small>
+                                </td>
+                                <td><span class="badge badge-"></span></td>
+                                <td></td>
+                                <td>
+                                    
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        
+                                            <a href="?action=approve&id=&filter=" 
+                                               class="btn btn-sm btn-success" title="Approve">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                            <a href="?action=reject&id=&filter=" 
+                                               class="btn btn-sm btn-danger" title="Reject">
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        
+                                            <a href="?action=issue&id=&filter=" 
+                                               class="btn btn-sm btn-primary" title="Issue Book">
+                                                <i class="fas fa-hand-holding"></i> Issue
+                                            </a>
+                                        
+                                            <a href="?action=return&id=&filter=" 
+                                               class="btn btn-sm btn-warning" title="Return Book">
+                                                <i class="fas fa-undo"></i> Return
+                                            </a>
+                                        
+                                            <span class="text-muted">-</span>
+                                        
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            
+                <div class="pagination">
+                    
+                        <a href="?page=&filter="><i class="fas fa-chevron-left"></i></a>
+                    
+                    
+                        
+                            <span class="active"></span>
+                        
+                            <a href="?page=&filter="></a>
+                        
+                    
+                    
+                        <a href="?page=&filter="><i class="fas fa-chevron-right"></i></a>
+                    
+                </div>
+            
+        
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h3>No Requests</h3>
+                <p>No requests found for the selected filter.</p>
+            </div>
+        
+    </div>
+</div>
+
+

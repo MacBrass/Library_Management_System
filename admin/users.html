@@ -1,0 +1,126 @@
+
+
+<div class="page-header">
+    <h1>Manage Users</h1>
+    <p>View and manage system users</p>
+</div>
+
+
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> 
+    </div>
+
+
+
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> 
+    </div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-users"></i> All Users ()</h2>
+        <div class="d-flex gap-1 align-center">
+            <form method="GET" action="" class="search-box" style="margin: 0;">
+                <i class="fas fa-search"></i>
+                <input type="text" name="search" placeholder="Search users..." 
+                       value="">
+                <input type="hidden" name="role" value="">
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Role Filter -->
+        <div class="btn-group mb-2">
+            <a href="?role=all" class="btn btn-sm ">All</a>
+            <a href="?role=admin" class="btn btn-sm ">Admins</a>
+            <a href="?role=professor" class="btn btn-sm ">Professors</a>
+            <a href="?role=student" class="btn btn-sm ">Students</a>
+        </div>
+
+        
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <tr>
+                                <td></td>
+                                <td><strong></strong></td>
+                                <td></td>
+                                <td>
+                                    <span class="badge badge-"></span>
+                                </td>
+                                <td></td>
+                                <td>
+                                    <span class="badge badge-">
+                                        
+                                    </span>
+                                </td>
+                                <td></td>
+                                <td>
+                                    
+                                        
+                                            <a href="?action=deactivate&id=&role=" 
+                                               class="btn btn-sm btn-danger" 
+                                               onclick="return confirm('Deactivate this user?')" 
+                                               title="Deactivate">
+                                                <i class="fas fa-ban"></i>
+                                            </a>
+                                        
+                                            <a href="?action=activate&id=&role=" 
+                                               class="btn btn-sm btn-success" 
+                                               title="Activate">
+                                                <i class="fas fa-check"></i>
+                                            </a>
+                                        
+                                    
+                                        <span class="text-muted">You</span>
+                                    
+                                </td>
+                            </tr>
+                        
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            
+                <div class="pagination">
+                    
+                        <a href="?page=&role=&search="><i class="fas fa-chevron-left"></i></a>
+                    
+                    
+                        
+                            <span class="active"></span>
+                        
+                            <a href="?page=&role=&search="></a>
+                        
+                    
+                    
+                        <a href="?page=&role=&search="><i class="fas fa-chevron-right"></i></a>
+                    
+                </div>
+            
+        
+            <div class="empty-state">
+                <i class="fas fa-users"></i>
+                <h3>No Users Found</h3>
+                <p>No users match the current filter.</p>
+            </div>
+        
+    </div>
+</div>
+
+

@@ -1,0 +1,106 @@
+
+
+<div class="page-header">
+    <h1>Add New Book</h1>
+    <p>Add a new book to the library collection</p>
+</div>
+
+
+    <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i> 
+    </div>
+
+
+
+    <div class="alert alert-danger">
+        <i class="fas fa-exclamation-circle"></i> 
+    </div>
+
+
+<div class="card">
+    <div class="card-header">
+        <h2><i class="fas fa-plus-circle"></i> Book Details</h2>
+    </div>
+    <div class="card-body">
+        <form method="POST" action="" enctype="multipart/form-data" id="addBookForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="title">Book Title <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="title" name="title" 
+                           placeholder="Enter book title" 
+                           value="" required>
+                </div>
+                <div class="form-group">
+                    <label for="author">Author <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="author" name="author" 
+                           placeholder="Enter author name" 
+                           value="" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="isbn">ISBN</label>
+                    <input type="text" class="form-control" id="isbn" name="isbn" 
+                           placeholder="e.g., 9780262033848" 
+                           value="">
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select class="form-control" id="category" name="category">
+                        <option value="">Select Category</option>
+                        
+                            <option value="" >
+                                
+                            </option>
+                        
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="publisher">Publisher</label>
+                    <input type="text" class="form-control" id="publisher" name="publisher" 
+                           placeholder="Enter publisher name" 
+                           value="">
+                </div>
+                <div class="form-group">
+                    <label for="year">Year of Publication</label>
+                    <input type="number" class="form-control" id="year" name="year" 
+                           placeholder="e.g., 2023" min="1900" max="" 
+                           value="">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="quantity">Quantity <span class="required">*</span></label>
+                    <input type="number" class="form-control" id="quantity" name="quantity" 
+                           placeholder="Number of copies" min="1" 
+                           value="" required>
+                </div>
+                <div class="form-group">
+                    <label>Book Cover Image</label>
+                    <div class="upload-area">
+                        <input type="file" id="coverImage" name="cover_image" accept=".jpg,.jpeg,.png">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload cover image (JPG, PNG, max 2MB)</p>
+                    </div>
+                    <div class="upload-preview" id="uploadPreview"></div>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary btn-lg" id="submitBookBtn">
+                    <i class="fas fa-plus-circle"></i> Add Book
+                </button>
+                <a href="manage_books.html" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Books
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
