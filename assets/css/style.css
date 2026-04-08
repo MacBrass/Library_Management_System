@@ -10,10 +10,10 @@
     --primary-light: #1e293b;
     --primary-dark: #020617;
 
-    /* Accent Colors - Sharp Electric Blue */
-    --accent: #3b82f6;
-    --accent-light: #60a5fa;
-    --accent-dark: #2563eb;
+    /* Accent Colors - Bright Sapphire Blue */
+    --accent: #60a5fa;
+    --accent-light: #93c5fd;
+    --accent-dark: #3b82f6;
 
     /* Status Colors */
     --success: #10b981;
@@ -1020,8 +1020,8 @@ textarea.form-control {
     min-height: 100vh;
     background-color: #050505;
     background-image: 
-        linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+        linear-gradient(rgba(96, 165, 250, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(96, 165, 250, 0.08) 1px, transparent 1px);
     background-size: 50px 50px;
     color: #f1f5f9;
     position: relative;
@@ -1098,7 +1098,7 @@ textarea.form-control {
 
 .landing-hero p {
     font-size: 1.25rem;
-    color: #94a3b8;
+    color: #cbd5e1; /* Brighter for visibility */
     max-width: 700px;
     margin-bottom: 48px;
     line-height: 1.6;
@@ -1160,7 +1160,7 @@ textarea.form-control {
 
 .feature-card p {
     font-size: 1rem;
-    color: #94a3b8;
+    color: #cbd5e1; /* Much brighter slate for readability */
     line-height: 1.6;
 }
 
