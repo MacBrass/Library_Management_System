@@ -14,58 +14,70 @@ checkAuth('student');
 $page_title = 'Student Dashboard';
 $user_id = $_SESSION['user_id'];
 
-// Fetch stats
-$res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'issued'");
-mysqli_stmt_bind_param($res, "i", $user_id);
-mysqli_stmt_execute($res);
-$active_borrows = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
-mysqli_stmt_close($res);
+if (!DEMO_MODE) {
+    // Fetch stats
+    $res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'issued'");
+    mysqli_stmt_bind_param($res, "i", $user_id);
+    mysqli_stmt_execute($res);
+    $active_borrows = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
+    mysqli_stmt_close($res);
 
-$res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'requested'");
-mysqli_stmt_bind_param($res, "i", $user_id);
-mysqli_stmt_execute($res);
-$pending_requests = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
-mysqli_stmt_close($res);
+    $res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'requested'");
+    mysqli_stmt_bind_param($res, "i", $user_id);
+    mysqli_stmt_execute($res);
+    $pending_requests = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
+    mysqli_stmt_close($res);
 
-$res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'approved'");
-mysqli_stmt_bind_param($res, "i", $user_id);
-mysqli_stmt_execute($res);
-$approved = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
-mysqli_stmt_close($res);
+    $res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'approved'");
+    mysqli_stmt_bind_param($res, "i", $user_id);
+    mysqli_stmt_execute($res);
+    $approved = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
+    mysqli_stmt_close($res);
 
-$res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'returned'");
-mysqli_stmt_bind_param($res, "i", $user_id);
-mysqli_stmt_execute($res);
-$returned = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
-mysqli_stmt_close($res);
+    $res = mysqli_prepare($conn, "SELECT COUNT(*) as total FROM requests WHERE user_id = ? AND status = 'returned'");
+    mysqli_stmt_bind_param($res, "i", $user_id);
+    mysqli_stmt_execute($res);
+    $returned = mysqli_fetch_assoc(mysqli_stmt_get_result($res))['total'];
+    mysqli_stmt_close($res);
 
-// Borrow limit
-$borrow_limit = STUDENT_BORROW_LIMIT;
-$limit_reached = isBorrowLimitReached($conn, $user_id, 'student');
+    // Borrow limit
+    $borrow_limit = STUDENT_BORROW_LIMIT;
+    $limit_reached = isBorrowLimitReached($conn, $user_id, 'student');
 
-// Active requests
-$my_requests = mysqli_prepare($conn, 
-    "SELECT r.*, b.title as book_title, b.author as book_author 
-     FROM requests r 
-     JOIN books b ON r.book_id = b.id 
-     WHERE r.user_id = ? AND r.status IN ('requested', 'approved', 'issued') 
-     ORDER BY r.request_date DESC"
-);
-mysqli_stmt_bind_param($my_requests, "i", $user_id);
-mysqli_stmt_execute($my_requests);
-$active_requests = mysqli_stmt_get_result($my_requests);
+    // Active requests
+    $my_requests = mysqli_prepare($conn, 
+        "SELECT r.*, b.title as book_title, b.author as book_author 
+         FROM requests r 
+         JOIN books b ON r.book_id = b.id 
+         WHERE r.user_id = ? AND r.status IN ('requested', 'approved', 'issued') 
+         ORDER BY r.request_date DESC"
+    );
+    mysqli_stmt_bind_param($my_requests, "i", $user_id);
+    mysqli_stmt_execute($my_requests);
+    $active_requests = mysqli_stmt_get_result($my_requests);
 
-// History
-$hist_stmt = mysqli_prepare($conn, 
-    "SELECT bh.*, b.title as book_title 
-     FROM borrow_history bh 
-     JOIN books b ON bh.book_id = b.id 
-     WHERE bh.user_id = ? 
-     ORDER BY bh.issue_date DESC LIMIT 10"
-);
-mysqli_stmt_bind_param($hist_stmt, "i", $user_id);
-mysqli_stmt_execute($hist_stmt);
-$history = mysqli_stmt_get_result($hist_stmt);
+    // History
+    $hist_stmt = mysqli_prepare($conn, 
+        "SELECT bh.*, b.title as book_title 
+         FROM borrow_history bh 
+         JOIN books b ON bh.book_id = b.id 
+         WHERE bh.user_id = ? 
+         ORDER BY bh.issue_date DESC LIMIT 10"
+    );
+    mysqli_stmt_bind_param($hist_stmt, "i", $user_id);
+    mysqli_stmt_execute($hist_stmt);
+    $history = mysqli_stmt_get_result($hist_stmt);
+} else {
+    // Mock data for demo mode
+    $active_borrows = 2;
+    $pending_requests = 1;
+    $approved = 1;
+    $returned = 5;
+    $borrow_limit = STUDENT_BORROW_LIMIT;
+    $limit_reached = false;
+    $active_requests = []; // JS will handle rendering or we can mock more here
+    $history = [];
+}
 
 include '../includes/header.php';
 include '../includes/sidebar.php';

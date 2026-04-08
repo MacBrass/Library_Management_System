@@ -22,7 +22,7 @@ $error = '';
 $name = $email = $department = '';
 
 // Process registration form
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !DEMO_MODE) {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';

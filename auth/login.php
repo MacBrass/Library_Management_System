@@ -30,7 +30,7 @@ if (isset($_GET['success'])) {
 }
 
 // Process login form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !DEMO_MODE) {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
